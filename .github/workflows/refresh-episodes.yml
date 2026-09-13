@@ -1,0 +1,44 @@
+name: Refresh episodes
+
+# Weekly refresh of the auto-managed episode list. The script fetches
+# the live Anchor.fm RSS feed for the show and rewrites the
+# AUTO-EPISODES-* / AUTO-LASTREFRESH / AUTO-EPCOUNT / AUTO-MARQUEE
+# marker regions inside index.html.
+
+on:
+  schedule:
+    # Mondays at 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    # Manual trigger via the Actions tab — useful for one-off refreshes
+    # after the show drops a batch of new episodes.
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    name: Fetch RSS and regenerate episode block
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run refresh script
+        run: |
+          set -euo pipefail
+          python3 scripts/refresh_episodes.py index.html
+
+      - name: Commit if changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- index.html scripts/refresh_episodes.py .github/workflows/refresh-episodes.yml; then
+            echo "No changes to commit — feed matches what is already on the page."
+          else
+            git config user.name "bbb-episode-bot"
+            git config user.email "bbb-episode-bot@users.noreply.github.com"
+            git add index.html
+            git commit -m "episodes: weekly refresh from anchor.fm RSS"
+            git push
+            echo "Pushed episode refresh."
+          fi

@@ -340,8 +340,167 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .btn { transition: none; }
-  .ai-dot, .dial-dot, .typewriter-caret { animation: none; }
-  .scanlines, .transmission-glitch { display: none; }
+  .ai-dot, .dial-dot, .typewriter-caret, .lt-dot { animation: none; }
+  .marquee-track { animation: none; transform: none; }
+  .hero, .hero-art img, body { animation: none !important; filter: none !important; }
+  .scanlines, .transmission-glitch, .acid-invert { display: none; }
+}
+
+/* ---------- Broadcast dial (header) — factual "TUNED · X ep" ---------- */
+.broadcast-dial {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+  background: var(--bg-elev);
+}
+.broadcast-dial .dial-freq {
+  color: var(--accent-3);
+  font-weight: 700;
+}
+.broadcast-dial .dial-label {
+  color: var(--fg);
+}
+.dial-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent-3);
+  display: inline-block;
+  animation: ai-pulse 3s ease-in-out infinite;
+}
+
+/* ---------- Marquee (scrolling episode strip) ---------- */
+.marquee {
+  position: sticky;
+  top: 56px;
+  z-index: 4;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  overflow: hidden;
+  padding: 6px 0;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee-scroll 90s linear infinite;
+  will-change: transform;
+}
+.marquee-text {
+  display: inline-block;
+  padding-right: 4em;
+  color: var(--fg-mute);
+}
+.marquee-text::before {
+  content: "▶ recent transmissions  ";
+  color: var(--accent);
+  font-weight: 700;
+}
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ---------- Acid flashback #1: slow hue rotation on hero ---------- */
+.hero {
+  animation: hero-acid 60s ease-in-out infinite;
+}
+@keyframes hero-acid {
+  0%, 100% { filter: hue-rotate(0deg); }
+  25%      { filter: hue-rotate(6deg) saturate(1.04); }
+  50%      { filter: hue-rotate(-4deg) saturate(1.08); }
+  75%      { filter: hue-rotate(8deg) saturate(1.02); }
+}
+
+/* ---------- Acid flashback #2: rare full-page colour invert ---------- */
+.acid-invert {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  background: var(--accent);
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+body.acid-on .acid-invert {
+  animation: acid-flash 700ms ease-in-out;
+}
+@keyframes acid-flash {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.85; }
+  60%  { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
+/* ---------- Acid flashback #3: chromatic aberration on cover ---------- */
+.hero-art img {
+  animation: chromatic-drift 9s ease-in-out infinite;
+}
+@keyframes chromatic-drift {
+  0%, 100% {
+    filter:
+      drop-shadow( 0.5px  0    0 rgba(255, 62, 165, 0.0))
+      drop-shadow(-0.5px  0    0 rgba(200, 255, 0,   0.0));
+  }
+  50% {
+    filter:
+      drop-shadow( 2px   0    0 rgba(255, 62, 165, 0.35))
+      drop-shadow(-2px   0    0 rgba(200, 255, 0,   0.35));
+  }
+}
+
+/* ---------- Live ticker (factual status, near footer) ---------- */
+.live-ticker {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6vw;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  color: var(--fg-mute);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.live-ticker .lt-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  display: inline-block;
+  animation: ai-pulse 2s ease-in-out infinite;
+}
+.live-ticker .lt-line {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.live-ticker .lt-signal { color: var(--accent); font-weight: 700; }
+.live-ticker .lt-line > span[aria-hidden] { opacity: 0.4; }
+.live-ticker a { color: var(--fg); }
+.live-ticker a:hover { color: var(--accent); }
+
+@media (max-width: 700px) {
+  .live-ticker { font-size: 0.66rem; padding: 6px 4vw; }
+  .marquee { font-size: 0.7rem; }
 }
 
 /* ---------- CRT scanlines (subtle, fixed overlay) ---------- */
@@ -386,37 +545,6 @@ body.glitch-on {
   0%   { filter: none; }
   50%  { filter: hue-rotate(20deg) saturate(1.4); }
   100% { filter: none; }
-}
-
-/* ---------- Broadcast dial (header) ---------- */
-.broadcast-dial {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--fg-mute);
-  background: var(--bg-elev);
-}
-.broadcast-dial .dial-freq {
-  color: var(--accent-3);
-  font-weight: 700;
-}
-.broadcast-dial .dial-label {
-  color: var(--fg);
-}
-.dial-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--accent-3);
-  display: inline-block;
-  animation: ai-pulse 3s ease-in-out infinite;
 }
 
 /* ---------- Typewriter tagline ---------- */
@@ -483,6 +611,30 @@ body.glitch-on {
 .konami-msg.show {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* ---------- "Receiving" corner flash ---------- */
+.receiving {
+  position: fixed;
+  right: 18px;
+  bottom: 64px;
+  z-index: 6;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: rgba(11, 11, 11, 0.85);
+  padding: 4px 9px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 250ms ease, transform 250ms ease;
+  pointer-events: none;
+}
+.receiving.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ---------- AI badge (header) ---------- */
