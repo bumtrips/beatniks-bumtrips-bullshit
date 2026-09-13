@@ -249,7 +249,7 @@ a:focus-visible {
 }
 .btn-ghost:hover { border-color: var(--fg); }
 
-.hero-art {
+.hero-art-stack {
   margin: 0;
   border-radius: var(--radius);
   overflow: hidden;
@@ -258,11 +258,29 @@ a:focus-visible {
   position: relative;
   aspect-ratio: 1 / 1;
 }
-.hero-art svg {
+/* Each per-theme cover is hidden by default; CSS shows only the one
+   matching the active data-theme. */
+.hero-art {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: none;
+  overflow: hidden;
+}
+.hero-art img {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
+/* Theme-driven visibility — only the matching cover shows. */
+html[data-theme="cyber"]    .hero-art-cyber,
+html[data-theme="zine"]     .hero-art-zine,
+html[data-theme="radio"]    .hero-art-radio,
+html[data-theme="desert"]   .hero-art-desert,
+html[data-theme="temple"]   .hero-art-temple,
+html[data-theme="brutalist"] .hero-art-brutalist { display: block; }
+
 .hero-art figcaption {
   position: absolute;
   bottom: 10px;
@@ -705,7 +723,7 @@ body.glitch-on {
 /* ---------- P2: Mobile / responsive UX ---------- */
 @media (max-width: 480px) {
   /* P2.1: Hero art is bounded on phones so it doesn't dwarf the headline. */
-  .hero-art { max-width: 280px; margin: 0 auto; }
+  .hero-art-stack { max-width: 280px; margin: 0 auto; }
   /* P2.2: Brand-name truncates so the nav fits. */
   .brand-name {
     max-width: 28vw;
@@ -1344,15 +1362,6 @@ html[data-theme="temple"] .receiving {
 
 /* ---------- "cyber" theme (default) gets explicit data attribute for clarity ---------- */
 html[data-theme="cyber"] { /* default :root above applies */ }
-
-/* ---------- P3: Per-theme cover filters ----------
-   The SVG cover uses the theme's CSS variables, so it already tints per theme.
-   These filters add a second layer of differentiation so rotation is visibly obvious. */
-html[data-theme="zine"]      .hero-art svg { filter: contrast(1.05) saturate(0.95); }
-html[data-theme="radio"]     .hero-art svg { filter: sepia(1) hue-rotate(-20deg) saturate(2.2); }
-html[data-theme="desert"]    .hero-art svg { filter: sepia(0.6) saturate(1.2); }
-html[data-theme="temple"]    .hero-art svg { filter: saturate(1.3) brightness(1.05); }
-html[data-theme="brutalist"] .hero-art svg { filter: grayscale(1) contrast(1.4); }
 
 /* ---------- Theme button icon spin pauses when reduced-motion is set ---------- */
 @media (prefers-reduced-motion: reduce) {

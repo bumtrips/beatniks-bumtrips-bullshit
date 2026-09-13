@@ -130,36 +130,16 @@
           </div>
         </div>
 
-        <figure class="hero-art" aria-label="Cover artwork for Beatniks, Bumtrips, Bullshit">
-          <!-- Inline SVG cover. Colors flow from the 6-theme CSS variable cascade,
-               so the same markup renders as 6 visually different covers. -->
-          <svg viewBox="0 0 1200 1200" preserveAspectRatio="xMidYMid meet"
-               role="img" aria-labelledby="cover-title">
-            <title id="cover-title">Beatniks, Bumtrips, Bullshit — cover</title>
-            <!-- Background -->
-            <rect width="1200" height="1200" fill="var(--bg, #0b0b0b)" />
-            <!-- Acid band along the top — same signature as the OG card + favicon -->
-            <rect x="0" y="0" width="1200" height="80" fill="var(--accent, #c8ff00)" />
-            <!-- Center BBB mark: thick-stroked rounded rect with the letters inside -->
-            <rect x="410" y="410" width="380" height="380" rx="60" ry="60"
-                  fill="none" stroke="var(--accent, #c8ff00)" stroke-width="18" />
-            <text x="600" y="650" text-anchor="middle"
-                  font-family="ui-monospace, 'SF Mono', Menlo, 'Courier New', monospace"
-                  font-weight="900" font-size="220" letter-spacing="-8"
-                  fill="var(--fg, #f5f5f0)">BBB</text>
-            <!-- Magenta accent dot, top-right corner -->
-            <circle cx="1040" cy="200" r="42" fill="var(--accent-2, #ff3ea5)" />
-            <!-- Bottom show-name label -->
-            <text x="600" y="1080" text-anchor="middle"
-                  font-family="ui-monospace, 'SF Mono', Menlo, 'Courier New', monospace"
-                  font-weight="700" font-size="46" letter-spacing="9"
-                  fill="var(--fg-mute, #a8a89e)">BEATNIKS · BUMTRIPS · BULLSHIT</text>
-            <!-- Tiny eyebrow above the title -->
-            <text x="600" y="350" text-anchor="middle"
-                  font-family="ui-monospace, 'SF Mono', Menlo, 'Courier New', monospace"
-                  font-weight="700" font-size="38" letter-spacing="14"
-                  fill="var(--fg-mute, #a8a89e)">A FIELD-RECORDED JOURNEY</text>
-          </svg>
+        <figure class="hero-art-stack" aria-label="Cover artwork for Beatniks, Bumtrips, Bullshit">
+          <!-- Six AI-generated covers, one per theme. CSS shows only the one
+               matching the active data-theme; theme rotation swaps the actual
+               image, not just the palette. -->
+          <figure class="hero-art hero-art-cyber"    data-theme-art="cyber"    aria-hidden="true"><img src="assets/covers/cover-cyber.jpg"    srcset="assets/covers/cover-cyber-600.jpg 600w, assets/covers/cover-cyber.jpg 2048w" sizes="(max-width: 900px) 90vw, 540px" alt="" loading="eager" fetchpriority="high" width="2048" height="1884" /></figure>
+          <figure class="hero-art hero-art-zine"     data-theme-art="zine"     aria-hidden="true"><img src="assets/covers/cover-zine.jpg"     srcset="assets/covers/cover-zine-600.jpg 600w, assets/covers/cover-zine.jpg 2048w"     sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></figure>
+          <figure class="hero-art hero-art-radio"    data-theme-art="radio"    aria-hidden="true"><img src="assets/covers/cover-radio.jpg"    srcset="assets/covers/cover-radio-600.jpg 600w, assets/covers/cover-radio.jpg 2048w"    sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></figure>
+          <figure class="hero-art hero-art-desert"   data-theme-art="desert"   aria-hidden="true"><img src="assets/covers/cover-desert.jpg"   srcset="assets/covers/cover-desert-600.jpg 600w, assets/covers/cover-desert.jpg 2048w"   sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></figure>
+          <figure class="hero-art hero-art-temple"   data-theme-art="temple"   aria-hidden="true"><img src="assets/covers/cover-temple.jpg"   srcset="assets/covers/cover-temple-600.jpg 600w, assets/covers/cover-temple.jpg 2048w"   sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></figure>
+          <figure class="hero-art hero-art-brutalist" data-theme-art="brutalist" aria-hidden="true"><img src="assets/covers/cover-brutalist.jpg" srcset="assets/covers/cover-brutalist-600.jpg 600w, assets/covers/cover-brutalist.jpg 2048w" sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></figure>
           <figcaption aria-hidden="true">cover · 2026</figcaption>
         </figure>
       </div>
