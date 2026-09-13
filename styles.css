@@ -42,6 +42,22 @@ a:focus-visible {
   border-radius: 4px;
 }
 
+/* Inline-text-block links: distinguishable beyond color (axe link-in-text-block). */
+.rss-note a,
+.ep-more a,
+.live-ticker a,
+.how-links a {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 3px;
+}
+.rss-note a:hover,
+.ep-more a:hover,
+.live-ticker a:hover,
+.how-links a:hover {
+  text-decoration-color: var(--accent);
+}
+
 .skip-link {
   position: absolute;
   left: -9999px;
@@ -114,7 +130,8 @@ a:focus-visible {
 .brand-mark {
   display: inline-grid;
   place-items: center;
-  width: 36px; height: 36px;
+  width: 44px; height: 44px;
+  min-width: 44px; min-height: 44px;
   border: 1.5px solid var(--accent);
   color: var(--accent);
   border-radius: 8px;
@@ -132,6 +149,11 @@ a:focus-visible {
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  /* WCAG 2.5.5 / Apple HIG: tap targets ≥44x44 px. */
+  padding: 14px 10px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 .primary-nav a:hover { color: var(--fg); text-decoration: none; }
 
@@ -352,7 +374,8 @@ a:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 10px;
+  padding: 12px 14px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 6px;
   font-family: var(--mono);
@@ -498,6 +521,13 @@ body.acid-on .acid-invert {
 .live-ticker .lt-line > span[aria-hidden] { opacity: 0.4; }
 .live-ticker a { color: var(--fg); }
 .live-ticker a:hover { color: var(--accent); }
+.live-ticker a, .live-ticker .lt-signal, .live-ticker .lt-source {
+  /* WCAG 2.5.5: tap targets ≥24x24 minimum; aim for 44 for primary links. */
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 6px;
+  min-height: 44px;
+}
 
 @media (max-width: 700px) {
   .live-ticker { font-size: 0.66rem; padding: 6px 4vw; }
@@ -577,7 +607,6 @@ body.glitch-on {
   overflow-x: auto;
   white-space: pre;
 }
-.ascii-art code { font: inherit; color: inherit; background: transparent; }
 
 /* ---------- Episodes "more" link ---------- */
 .ep-more {
@@ -605,10 +634,13 @@ body.glitch-on {
 .ep-platforms a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   color: var(--fg-mute);
   text-decoration: none;
-  padding: 4px 8px;
+  padding: 12px 12px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 4px;
   border: 1px solid var(--line);
   transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
@@ -640,6 +672,36 @@ body.glitch-on {
 
 @media (max-width: 480px) {
   .ep-platforms { gap: 8px; font-size: 0.95rem; }
+}
+
+/* ---------- P2: Mobile / responsive UX ---------- */
+@media (max-width: 480px) {
+  /* P2.1: Hero art is bounded on phones so it doesn't dwarf the headline. */
+  .hero-art { max-width: 280px; margin: 0 auto; }
+  /* P2.2: Brand-name truncates on narrow viewports to keep nav visible. */
+  .brand-name {
+    max-width: 50vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .header-wrap { gap: 12px; }
+  /* P2.4: Pull-quote scales down on small screens. */
+  .pull { font-size: clamp(1.25rem, 4.5vw, 1.6rem); }
+  /* Shrink primary-nav link font slightly so 4 items fit at 320 px. */
+  .primary-nav a { font-size: 0.78rem; padding: 12px 6px; }
+  .primary-nav { gap: 4px; }
+  .display { font-size: clamp(2.2rem, 10vw, 4rem); }
+  .display.sm { font-size: clamp(1.7rem, 6vw, 2.6rem); }
+  .code-fence, .ascii-art { font-size: 0.72rem; }
+}
+
+/* ---------- P2.3: iOS safe-area-inset on sticky chrome + corner ticker ---------- */
+.site-header { padding-top: max(0px, env(safe-area-inset-top)); }
+.live-ticker { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
+.receiving {
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(64px, calc(64px + env(safe-area-inset-bottom)));
 }
 
 /* ---------- Konami easter-egg message ---------- */
@@ -696,7 +758,8 @@ body.glitch-on {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px;
+  padding: 12px 14px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--bg-elev);
@@ -763,6 +826,15 @@ body.glitch-on {
   color: var(--fg);
 }
 .code-fence code { font: inherit; color: inherit; background: transparent; }
+.code-fence figcaption {
+  white-space: normal;
+  display: block;
+  margin-bottom: 12px;
+  color: var(--fg-mute);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 .prompt-user   { color: var(--accent-2); display: block; }
 .prompt-asst   { color: var(--accent);   display: block; }
 .decisions {
@@ -864,7 +936,8 @@ html.tripping * {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 11px;
+  padding: 12px 14px;
+  min-height: 44px;
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--bg-elev);
@@ -895,9 +968,11 @@ html[data-theme="zine"] {
   --bg-elev: #ebe3d0;
   --fg: #1a1a1a;
   --fg-mute: #4a3f33;
-  --accent: #c44b1e;
+  /* accent darkened #c44b1e -> #9b3815 (contrast 4.15 -> 5.5 on bg) */
+  --accent: #9b3815;
+  /* accent-3 darkened in step with accent */
+  --accent-3: #7a2d12;
   --accent-2: #2d6e6e;
-  --accent-3: #8b3a1e;
   --line: rgba(26, 26, 26, 0.18);
   --serif: "Special Elite", "Courier Prime", "Courier New", monospace;
   --body: "Crimson Pro", Georgia, "Times New Roman", serif;
@@ -930,6 +1005,9 @@ html[data-theme="zine"] .dial-dot,
 html[data-theme="zine"] .lt-dot { background: var(--accent); }
 html[data-theme="zine"] .btn { border-radius: 2px; }
 html[data-theme="zine"] .btn-primary { background: var(--accent); color: var(--bg); }
+/* Fix btn-ghost fg contrast: was var(--fg)=#1a1a1a on var(--bg-elev)=#ebe3d0 = 1.21 (invisible).
+   Make btn-ghost transparent so fg contrasts against the section background instead. */
+html[data-theme="zine"] .btn-ghost { background: transparent; border-color: var(--fg); color: var(--fg); }
 html[data-theme="zine"] .hero {
   background:
     radial-gradient(800px 400px at 90% -10%, rgba(196, 75, 30, 0.12), transparent 60%),
@@ -1003,10 +1081,12 @@ html[data-theme="radio"] .ascii-art {
 /* ---------- Theme 4: DESERT (field-recording palette) ---------- */
 html[data-theme="desert"] {
   --bg: #d4b896;
-  --bg-elev: #c4a884;
+  --bg-elev: #dec7a8;
   --fg: #3a2410;
-  --fg-mute: #6e5a3a;
-  --accent: #b8421a;
+  /* fg-mute darkened #6e5a3a -> #4a3a20 (contrast 3.48 -> 5.7) */
+  --fg-mute: #4a3a20;
+  /* accent darkened #b8421a -> #8a320f (contrast 2.90 -> 4.7) */
+  --accent: #8a320f;
   --accent-2: #6b3a1e;
   --accent-3: #4a2f1a;
   --line: rgba(58, 36, 16, 0.22);
@@ -1039,6 +1119,8 @@ html[data-theme="desert"] .dial-dot,
 html[data-theme="desert"] .lt-dot { background: var(--accent); }
 html[data-theme="desert"] .btn { border-radius: 4px; }
 html[data-theme="desert"] .btn-primary { background: var(--accent); color: var(--bg); }
+/* Fix btn-ghost contrast (was 1.44:1 on bg-elev). Make it transparent. */
+html[data-theme="desert"] .btn-ghost { background: transparent; border-color: var(--fg); color: var(--fg); }
 html[data-theme="desert"] .hero {
   background:
     radial-gradient(900px 450px at 90% -10%, rgba(184, 66, 26, 0.18), transparent 60%),
@@ -1061,10 +1143,13 @@ html[data-theme="temple"] {
   --bg: #0a0420;
   --bg-elev: #150a30;
   --fg: #d4af37;
-  --fg-mute: #8b7530;
+  /* fg-mute brightened #8b7530 -> #c4a050 (4.46 -> 5.5) */
+  --fg-mute: #c4a050;
   --accent: #d4af37;
-  --accent-2: #2e5090;
-  --accent-3: #6b2d5c;
+  /* accent-2 brightened #2e5090 -> #5680c0 (2.54 -> 5.0) */
+  --accent-2: #5680c0;
+  /* accent-3 brightened #6b2d5c -> #b06fa0 (2.05 -> 5.1) */
+  --accent-3: #b06fa0;
   --line: rgba(212, 175, 55, 0.20);
   --serif: "Cinzel", "Cormorant Garamond", Georgia, serif;
   --body: "Cormorant Garamond", Georgia, "Times New Roman", serif;
@@ -1163,10 +1248,19 @@ html[data-theme="brutalist"] .btn {
   color: var(--fg);
 }
 html[data-theme="brutalist"] .btn-primary {
-  background: var(--fg);
+  /* Brutalist was: fg #000 on accent #0a0a0a = 1.06:1 (invisible).
+     Override: use accent-2 (magenta) so white text has >4.5:1 contrast. */
+  background: var(--accent-2);
+  border-color: var(--accent-2);
   color: var(--bg);
 }
-html[data-theme="brutalist"] .btn-primary:hover { background: var(--accent-2); border-color: var(--accent-2); color: var(--bg); }
+html[data-theme="brutalist"] .btn-primary:hover { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+html[data-theme="brutalist"] .btn-ghost {
+  background: transparent;
+  border-color: var(--fg);
+  color: var(--fg);
+}
+html[data-theme="brutalist"] .btn-ghost:hover { background: var(--fg); color: var(--bg); }
 html[data-theme="brutalist"] .display { letter-spacing: 0; text-transform: none; }
 html[data-theme="brutalist"] .hero {
   background: none;
@@ -1213,4 +1307,94 @@ html[data-theme="cyber"] { /* default :root above applies */ }
   html.tripping { animation: none; }
   .theme-toggle-icon { animation: none; }
   body { transition: none; }
+}
+
+/* ---------- P1.5: prefers-contrast: more boost ---------- */
+/* When the OS reports increased contrast, push all themes toward high-contrast pairs. */
+@media (prefers-contrast: more) {
+  /* cyber */
+  :root {
+    --fg-mute: #d8d8c8;
+    --accent: #e0ff66;
+    --accent-2: #ff6ec0;
+    --accent-3: #ffe066;
+    --line: rgba(255, 255, 255, 0.30);
+  }
+  html[data-theme="zine"] {
+    --fg-mute: #2a1d10;
+    --accent: #6b2406;
+    --accent-2: #1b4a4a;
+    --accent-3: #5a1f08;
+  }
+  html[data-theme="radio"] {
+    --fg-mute: #ffd866;
+    --accent: #ffd866;
+  }
+  html[data-theme="desert"] {
+    --fg-mute: #2a1d10;
+    --accent: #6b2406;
+    --bg-elev: #e8d6b8;
+  }
+  html[data-theme="temple"] {
+    --fg-mute: #f0d878;
+    --accent-2: #a0c0ff;
+    --accent-3: #e6a0d0;
+  }
+  html[data-theme="brutalist"] {
+    --fg-mute: #2a2a2a;
+    --accent-2: #d6006b;
+  }
+  /* Strip decorative overlays entirely. */
+  .scanlines, .transmission-glitch, .acid-invert, body::before { display: none !important; }
+}
+
+/* ---------- P0.7: forced-colors (Windows High Contrast Mode) ---------- */
+@media (forced-colors: active) {
+  :root {
+    --bg: Canvas;
+    --bg-elev: Canvas;
+    --fg: CanvasText;
+    --fg-mute: CanvasText;
+    --accent: LinkText;
+    --accent-2: Highlight;
+    --accent-3: CanvasText;
+    --line: CanvasText;
+  }
+  .scanlines,
+  .transmission-glitch,
+  .acid-invert,
+  body::before { display: none !important; }
+  /* All interactive surfaces must be visible in forced-colors. */
+  .btn,
+  .platform,
+  .brand-mark,
+  .ai-badge,
+  .broadcast-dial,
+  .theme-toggle,
+  .ep-platforms a,
+  .episode {
+    border: 1px solid CanvasText !important;
+    forced-color-adjust: none;
+  }
+  .btn-primary {
+    background: Highlight !important;
+    color: HighlightText !important;
+    border-color: HighlightText !important;
+  }
+  .btn-primary:hover {
+    background: CanvasText !important;
+    color: Canvas !important;
+  }
+  a, a:hover, a:focus-visible {
+    color: LinkText;
+    text-decoration: underline;
+  }
+  a:focus-visible,
+  .ep-platforms a:focus-visible,
+  .btn:focus-visible {
+    outline: 3px solid Highlight !important;
+    outline-offset: 2px;
+  }
+  /* Marquee + ticker still readable but no animation. */
+  .marquee-track { animation: none !important; transform: none !important; }
 }

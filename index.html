@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Beatniks, Bumtrips, Bullshit — A field-recorded journey through literature, consciousness, and counterculture</title>
   <meta name="description" content="A field-recorded journey through literature, consciousness, and counterculture. Spontaneous conversations about mysticism, poetry, art, music, total bullshit, sci-fi, paranoia, dream, utopia, and friendship." />
-  <meta name="theme-color" content="#0b0b0b" />
-  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#0b0b0b" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f3eee2" media="(prefers-color-scheme: light)" />
+  <meta name="color-scheme" content="dark light" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -26,9 +27,33 @@
   <meta name="twitter:image" content="assets/og-card.png" />
   <meta name="twitter:image:alt" content="Beatniks, Bumtrips, Bullshit — A field-recorded journey. Cover art on the right, title in acid green and magenta on the left." />
 
-  <link rel="icon" type="image/jpeg" href="assets/artwork.jpg" />
-  <link rel="apple-touch-icon" href="assets/artwork.jpg" />
+  <!-- P3.4: Preload LCP image (WebP variant) so first paint isn't blocked. -->
+  <link rel="preload" as="image" href="assets/artwork-1200.webp" type="image/webp" fetchpriority="high" />
+
+  <!-- P3.3: Dedicated favicon + apple-touch-icon. -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
   <link rel="canonical" href="https://bumtrips.com/" />
+
+  <!-- P5.2: RSS auto-discovery for podcast readers. -->
+  <link rel="alternate" type="application/rss+xml" title="Beatniks, Bumtrips, Bullshit" href="https://anchor.fm/s/4431c4ac/podcast/rss" />
+
+  <!-- P5.1: Podcast structured data. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Podcast",
+    "name": "Beatniks, Bumtrips, Bullshit",
+    "description": "A field-recorded journey through literature, consciousness, and counterculture. Spontaneous conversations about mysticism, poetry, art, music, total bullshit, sci-fi, paranoia, dream, utopia, and friendship.",
+    "url": "https://bumtrips.com/",
+    "webFeed": "https://anchor.fm/s/4431c4ac/podcast/rss",
+    "author": { "@type": "Person", "name": "Jedidiah Jackson" },
+    "image": "https://bumtrips.com/assets/og-card.png",
+    "inLanguage": "en",
+    "genre": ["Arts", "Literature", "Philosophy"]
+  }
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -67,12 +92,13 @@
     </div>
   </header>
 
-  <!-- Scrolling marquee of recent episode titles (auto-managed) -->
-  <div class="marquee" aria-label="Recent episodes">
+  <!-- Scrolling marquee of recent episode titles (auto-managed).
+       P0.3: Wrap in <aside> so the marquee lives inside a landmark (axe `region`). -->
+  <aside class="marquee" aria-label="Recent episode titles">
     <div class="marquee-track">
       <span class="marquee-text"><!-- AUTO-MARQUEE -->Bottled At The Source · The Suns Out Boys ! · BBB My Last Night in North Africa · North Africa Erotic Currents · Egyptian Speed · Narrating hieroglyphics and meditating on a mummy from the fourth dimension · Sunrise Narration from the Land of the Dead · Lion Face Calm / notes from Cairo · BBB Inside a Pyramid · Horse Music · votive notes from Cairo · NUS NUS · Bottled At The Source · The Suns Out Boys ! · BBB My Last Night in North Africa · North Africa Erotic Currents · Egyptian Speed · Narrating hieroglyphics and meditating on a mummy from the fourth dimension · Sunrise Narration from the Land of the Dead · Lion Face Calm / notes from Cairo · BBB Inside a Pyramid · Horse Music · votive notes from Cairo · NUS NUS<!-- /AUTO-MARQUEE --></span>
     </div>
-  </div>
+  </aside>
 
   <main id="main">
     <!-- HERO -->
@@ -107,7 +133,19 @@
         </div>
 
         <figure class="hero-art" aria-label="Cover artwork for Beatniks, Bumtrips, Bullshit">
-          <img src="assets/artwork.jpg" alt="Beatniks, Bumtrips, Bullshit cover art" width="600" height="600" />
+          <picture>
+            <source type="image/webp"
+                    srcset="assets/artwork-600.webp 600w, assets/artwork-1200.webp 1200w"
+                    sizes="(max-width: 900px) 90vw, 540px" />
+            <source type="image/jpeg"
+                    srcset="assets/artwork-600.jpg 600w, assets/artwork-1200.jpg 1200w"
+                    sizes="(max-width: 900px) 90vw, 540px" />
+            <img src="assets/artwork-1200.jpg"
+                 alt="Beatniks, Bumtrips, Bullshit cover art"
+                 width="1200" height="1200"
+                 decoding="async"
+                 fetchpriority="high" />
+          </picture>
           <figcaption aria-hidden="true">cover · 2026</figcaption>
         </figure>
       </div>
@@ -130,9 +168,9 @@
             consciousness and counterculture. A field-recorded journey — meaning the microphone
             is rolling whenever the conversation takes a turn worth keeping.
           </p>
-          <p class="pull">
-            "These are spontaneous conversations — raw sounds, real voices, and the rhythm of thought."
-          </p>
+          <blockquote class="pull">
+            <p>These are spontaneous conversations — raw sounds, real voices, and the rhythm of thought.</p>
+          </blockquote>
         </div>
       </div>
     </section>
@@ -147,7 +185,9 @@
           the copy, picked the colours, or wired the layout. Here is the receipt.
         </p>
 
-        <pre class="code-fence" aria-label="Excerpt of the agent's prompt that produced this page"><code><span class="prompt-user">&gt; You're the marketing team for a new podcast called</span>
+        <figure class="code-fence">
+          <figcaption>Excerpt of the agent's prompt that produced this page</figcaption>
+          <pre><code><span class="prompt-user">&gt; You're the marketing team for a new podcast called</span>
 <span class="prompt-user">&gt; "Beatniks, Bumtrips, Bullshit" — counterculture,</span>
 <span class="prompt-user">&gt; literature, field-recorded conversations. Build a</span>
 <span class="prompt-user">&gt; landing page that markets the show. No human will</span>
@@ -159,6 +199,7 @@
 <span class="prompt-asst">// deliver: static HTML, single CSS file, deploy to GH Pages</span>
 
 <span class="prompt-user">&gt; commit. push. deploy. report when green.</span></code></pre>
+        </figure>
 
         <ul class="decisions" role="list">
           <li><strong>Dark palette, acid-green primary.</strong> Matches the counterculture mood without leaning into cliché neon.</li>
@@ -168,7 +209,7 @@
           <li><strong>This attribution block.</strong> The page tells you it was generated by an AI, and links to the exact commit.</li>
         </ul>
 
-        <pre class="ascii-art" aria-label="ASCII representation of the show's initials"><code>+--------------------------------------------------------+
+        <div class="ascii-art" role="img" aria-label="ASCII representation of the show's initials">+--------------------------------------------------------+
 |                                                        |
 |          *  BEATNIKS · BUMTRIPS · BULLSHIT  *          |
 |                                                        |
@@ -177,7 +218,7 @@
 |            the moment spirit makes its wild            |
 |                   plunge into matter                   |
 |                                                        |
-+--------------------------------------------------------+</code></pre>
++--------------------------------------------------------+</div>
 
         <p class="how-links">
           <a href="https://github.com/studio2201/beatniks-bumtrips-bullshit">View the source on GitHub</a>

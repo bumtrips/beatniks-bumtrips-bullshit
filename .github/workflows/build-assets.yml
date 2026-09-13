@@ -1,0 +1,51 @@
+name: Build assets
+
+# Weekly regeneration of the responsive artwork, favicon, and apple-touch-icon.
+# The script reads assets/artwork.jpg (the canonical 1200x1200 source) and
+# emits smaller JPEG + WebP variants, plus a vector favicon and a 180x180
+# apple-touch-icon. Idempotent: if the source hasn't changed and every
+# output is newer than the source, no commit is made.
+
+on:
+  schedule:
+    # Weekly on Mondays at 06:30 UTC, offset from the episode refresh so
+    # the two cron jobs don't race for git write access.
+    - cron: "30 6 * * 1"
+  workflow_dispatch:
+    # Manual trigger via the Actions tab — useful after replacing artwork.jpg.
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Regenerate responsive artwork
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Python dependencies
+        run: |
+          set -euo pipefail
+          python3 -m pip install --quiet --upgrade pip
+          python3 -m pip install --quiet Pillow
+
+      - name: Run asset build
+        run: |
+          set -euo pipefail
+          python3 scripts/build_assets.py
+
+      - name: Commit if changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- assets/ scripts/build_assets.py; then
+            echo "No asset changes — outputs already up to date."
+          else
+            git config user.name "bbb-asset-bot"
+            git config user.email "bbb-asset-bot@users.noreply.github.com"
+            git add assets/
+            git commit -m "assets: regenerate responsive artwork, favicon, apple-touch-icon"
+            git push
+            echo "Pushed asset regeneration."
+          fi
