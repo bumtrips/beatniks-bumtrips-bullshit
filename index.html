@@ -463,18 +463,34 @@
       setTimeout(fire, 5500);
     })();
 
-    // 7. Theme cycling — manual button + auto-rotate + acid-trip transition.
+    // 7. Theme cycling — random theme picks, two triggers:
+    //    (a) auto-rotate timer (1-2.5 min between rotations)
+    //    (b) scroll activity (600px cumulative within a 30s cooldown)
+    //    Both fire the acid-trip transition. Either trigger resets
+    //    the other clock so we never get two swaps back-to-back.
     (function themes() {
       var THEMES = ['cyber', 'zine', 'radio', 'desert', 'temple', 'brutalist'];
       var TRIP_MS = 720;
-      var AUTO_MIN_MS = 18000;   // 18 s minimum between auto-rotations
-      var AUTO_RAND_MS = 32000;  // up to +32 s of randomness on top
+      var AUTO_MIN_MS = 60000;          // 1 min minimum between auto-rotations
+      var AUTO_RAND_MS = 90000;         // up to +1.5 min of randomness
+      var FIRST_AUTO_DELAY_MS = 12000;  // first auto-rotation after page load
+      var SCROLL_THRESHOLD_PX = 600;    // cumulative scroll distance to fire
+      var SCROLL_COOLDOWN_MS = 30000;   // 30s between scroll-triggered swaps
 
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var idx = 0;
       var autoTimer = null;
       var root = document.documentElement;
       var nameEl = document.getElementById('theme-name');
+
+      function pickRandomNext() {
+        // Avoid landing on the current theme (would be a no-op trip).
+        if (THEMES.length <= 1) return 0;
+        var next;
+        do { next = Math.floor(Math.random() * THEMES.length); }
+        while (next === idx);
+        return next;
+      }
 
       function apply(nextIdx, withTrip) {
         idx = ((nextIdx % THEMES.length) + THEMES.length) % THEMES.length;
@@ -484,29 +500,47 @@
         }
         root.setAttribute('data-theme', THEMES[idx]);
         if (nameEl) nameEl.textContent = THEMES[idx];
+        // Any swap resets the auto-rotate clock.
+        scheduleAuto();
       }
 
       function scheduleAuto() {
         if (autoTimer) clearTimeout(autoTimer);
         var delay = AUTO_MIN_MS + Math.random() * AUTO_RAND_MS;
         autoTimer = setTimeout(function () {
-          apply(idx + 1, true);
-          scheduleAuto();
+          apply(pickRandomNext(), true);
         }, delay);
+      }
+
+      // Scroll trigger — accumulate scroll distance; fire when the
+      // threshold is crossed AND the cooldown has elapsed.
+      if (!reduce) {
+        var lastY = window.scrollY || 0;
+        var accum = 0;
+        var lastScrollSwap = 0;
+        window.addEventListener('scroll', function () {
+          var y = window.scrollY;
+          accum += Math.abs(y - lastY);
+          lastY = y;
+          var now = Date.now();
+          if (accum >= SCROLL_THRESHOLD_PX && (now - lastScrollSwap) >= SCROLL_COOLDOWN_MS) {
+            accum = 0;
+            lastScrollSwap = now;
+            apply(pickRandomNext(), true);
+          }
+        }, { passive: true });
       }
 
       var btn = document.getElementById('theme-toggle');
       if (btn) {
         btn.addEventListener('click', function () {
-          apply(idx + 1, true);
-          // Reset auto-rotate clock so the manual click counts as activity.
-          scheduleAuto();
+          apply(pickRandomNext(), true);
         });
       }
 
-      // Start at default (cyber). Auto-rotate kicks off after 8 s.
+      // Start at default (cyber). Auto-rotate kicks off after a beat.
       apply(0, false);
-      if (!reduce) setTimeout(scheduleAuto, 8000);
+      if (!reduce) setTimeout(scheduleAuto, FIRST_AUTO_DELAY_MS);
     })();
   </script>
 </body>
