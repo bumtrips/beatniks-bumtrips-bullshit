@@ -46,7 +46,6 @@ a:focus-visible {
 .rss-note a,
 .ep-more a,
 .live-ticker a,
-.how-links a,
 .site-footer .credit a {
   text-decoration: underline;
   text-decoration-color: rgba(255, 255, 255, 0.35);
@@ -55,7 +54,6 @@ a:focus-visible {
 .rss-note a:hover,
 .ep-more a:hover,
 .live-ticker a:hover,
-.how-links a:hover,
 .site-footer .credit a:hover {
   text-decoration-color: var(--accent);
 }
@@ -580,21 +578,6 @@ body.glitch-on {
   50% { opacity: 0; }
 }
 
-/* ---------- ASCII art (in #how) ---------- */
-.ascii-art {
-  font-family: var(--mono);
-  font-size: 0.78rem;
-  line-height: 1.2;
-  background: var(--bg-elev);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  margin: 1.5rem 0 0.5rem;
-  color: var(--accent);
-  overflow-x: auto;
-  white-space: pre;
-}
-
 /* ---------- Episodes "more" link ---------- */
 .ep-more {
   margin: 1.2rem 0 0;
@@ -687,7 +670,6 @@ body.glitch-on {
   .pull { font-size: clamp(1.25rem, 4.5vw, 1.6rem); }
   .display { font-size: clamp(2.2rem, 10vw, 4rem); }
   .display.sm { font-size: clamp(1.7rem, 6vw, 2.6rem); }
-  .code-fence, .ascii-art { font-size: 0.72rem; }
 }
 /* At very narrow widths (<380 px, e.g. iPhone SE 1st gen), drop "Bumtrips · Bullshit"
    entirely — keep just the brand mark + nav. Brand-name becomes essentially the
@@ -802,78 +784,6 @@ body.glitch-on {
   text-underline-offset: 3px;
 }
 .hero-meta a:hover { text-decoration-color: var(--accent); }
-
-/* ---------- HOW (process transparency) ---------- */
-.how {
-  padding: 8vh 0;
-  border-bottom: 1px solid var(--line);
-}
-.how .eyebrow {
-  font-family: var(--mono);
-  color: var(--accent);
-}
-.code-fence {
-  font-family: var(--mono);
-  font-size: 0.86rem;
-  line-height: 1.55;
-  background: var(--bg-elev);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 18px 20px;
-  overflow-x: auto;
-  white-space: pre;
-  margin: 1.5rem 0 2rem;
-  color: var(--fg);
-}
-.code-fence code { font: inherit; color: inherit; background: transparent; }
-.code-fence figcaption {
-  white-space: normal;
-  display: block;
-  margin-bottom: 12px;
-  color: var(--fg-mute);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.prompt-user   { color: var(--accent-2); display: block; }
-.prompt-asst   { color: var(--accent);   display: block; }
-.decisions {
-  list-style: none;
-  padding: 0;
-  margin: 1.5rem 0;
-  display: grid;
-  gap: 10px;
-}
-.decisions li {
-  padding: 12px 16px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--bg-elev);
-  color: var(--fg-mute);
-}
-.decisions strong { color: var(--fg); margin-right: 6px; }
-.decisions code {
-  font-family: var(--mono);
-  font-size: 0.85em;
-  color: var(--accent);
-  background: rgba(200,255,0,0.06);
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-.how-links {
-  margin-top: 1.5rem;
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--fg-mute);
-}
-.how-links a { color: var(--fg); }
-.how-links a:hover { color: var(--accent); }
-.how-links span[aria-hidden] {
-  display: inline-block;
-  margin: 0 8px;
-  color: var(--fg-mute);
-  opacity: 0.5;
-}
 
 /* ---------- Footer credit extension ---------- */
 .site-footer .credit a { color: var(--fg); }
@@ -1013,13 +923,6 @@ html[data-theme="zine"] .hero {
     radial-gradient(800px 400px at 90% -10%, rgba(196, 75, 30, 0.12), transparent 60%),
     radial-gradient(700px 350px at -10% 110%, rgba(45, 110, 110, 0.10), transparent 60%);
 }
-html[data-theme="zine"] .code-fence,
-html[data-theme="zine"] .ascii-art {
-  background: var(--bg-elev);
-  border-color: var(--accent);
-  color: var(--fg);
-  box-shadow: 2px 2px 0 0 rgba(196, 75, 30, 0.3);
-}
 
 /* ---------- Theme 3: RADIO (CRT amber terminal) ---------- */
 html[data-theme="radio"] {
@@ -1062,12 +965,6 @@ html[data-theme="radio"] .hero {
   background: radial-gradient(800px 400px at 50% 30%, rgba(255, 176, 0, 0.06), transparent 70%);
 }
 html[data-theme="radio"] .display { letter-spacing: 0.04em; }
-html[data-theme="radio"] .code-fence,
-html[data-theme="radio"] .ascii-art {
-  background: #000;
-  border-color: var(--accent);
-  color: var(--accent);
-}
 
 /* ---------- Theme 4: DESERT (field-recording palette) ---------- */
 html[data-theme="desert"] {
@@ -1118,12 +1015,6 @@ html[data-theme="desert"] .hero {
     radial-gradient(700px 400px at -10% 110%, rgba(74, 47, 26, 0.18), transparent 60%);
 }
 html[data-theme="desert"] .display { font-style: italic; }
-html[data-theme="desert"] .code-fence,
-html[data-theme="desert"] .ascii-art {
-  background: var(--bg-elev);
-  border-color: var(--accent);
-  color: var(--fg);
-}
 
 /* ---------- Theme 5: TEMPLE (stained glass / jewel tones) ---------- */
 html[data-theme="temple"] {
@@ -1176,13 +1067,6 @@ html[data-theme="temple"] .hero {
   background:
     radial-gradient(1000px 500px at 50% 0%, rgba(46, 80, 144, 0.18), transparent 60%),
     radial-gradient(700px 350px at 50% 100%, rgba(107, 45, 92, 0.15), transparent 60%);
-}
-html[data-theme="temple"] .code-fence,
-html[data-theme="temple"] .ascii-art {
-  background: var(--bg-elev);
-  border-color: var(--accent);
-  color: var(--accent);
-  text-shadow: 0 0 4px rgba(212, 175, 55, 0.3);
 }
 
 /* ---------- Theme 6: BRUTALIST (anti-design) ---------- */
@@ -1248,16 +1132,6 @@ html[data-theme="brutalist"] .hero {
   background: none;
   border-bottom: 4px solid var(--fg);
 }
-html[data-theme="brutalist"] .code-fence,
-html[data-theme="brutalist"] .ascii-art {
-  background: var(--bg);
-  border: 2px solid var(--fg);
-  color: var(--fg);
-}
-html[data-theme="brutalist"] .code-fence .prompt-user { color: var(--accent-2); }
-html[data-theme="brutalist"] .code-fence .prompt-asst { color: var(--fg); }
-html[data-theme="brutalist"] .ascii-art { color: var(--fg); }
-
 /* ---------- Per-theme overrides for the weird layer ---------- */
 /* Marquee + ticker + typewriter should pick up new colours automatically
    since they already use the variables. The dial/AI/live dots override
