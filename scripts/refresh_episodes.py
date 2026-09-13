@@ -29,17 +29,27 @@ Defaults to `index.html` in the repo root when run from CI.
 from __future__ import annotations
 
 import html
+import json
 import os
 import re
 import subprocess
 import sys
 import urllib.request
+import urllib.error
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
+from pathlib import Path
 from xml.etree import ElementTree as ET
 
 RSS_URL = "https://anchor.fm/s/4431c4ac/podcast/rss"
+ITUNES_LOOKUP_URL = (
+    "https://itunes.apple.com/lookup"
+    "?id=1663479533&entity=podcastEpisode&limit=200"
+)
 N_EPISODES = 8  # how many to render in the on-page list
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+APPLE_CACHE_PATH = REPO_ROOT / "data" / "apple_episode_ids.json"
 
 EPISODES_START = "<!-- AUTO-EPISODES-START -->"
 EPISODES_END = "<!-- AUTO-EPISODES-END -->"
@@ -57,6 +67,84 @@ def fetch_rss(url: str) -> bytes:
         return r.read()
 
 
+def fetch_apple_episode_ids() -> dict[str, dict]:
+    """Fetch per-episode Apple Podcasts IDs from the iTunes Lookup API.
+
+    Returns {guid: {"apple_id": int, "slug": str}} for each episode
+    we can map. Gracefully returns an empty dict if the API is
+    unreachable or returns an error — the caller is expected to
+    fall back to the on-disk cache in that case.
+    """
+    try:
+        req = urllib.request.Request(
+            ITUNES_LOOKUP_URL,
+            headers={"User-Agent": "bbb-marketing/1.0"},
+        )
+        with urllib.request.urlopen(req, timeout=20) as r:
+            payload = json.loads(r.read())
+    except (urllib.error.URLError, json.JSONDecodeError, TimeoutError) as exc:
+        print(f"warn: iTunes lookup failed: {exc}", file=sys.stderr)
+        return {}
+
+    if payload.get("resultCount", 0) == 0:
+        return {}
+
+    out: dict[str, dict] = {}
+    for ep in payload.get("results", []):
+        if ep.get("wrapperType") != "podcastEpisode":
+            continue
+        guid = ep.get("episodeGuid")
+        track_id = ep.get("trackId")
+        view_url = ep.get("trackViewUrl", "")
+        if not guid or not track_id:
+            continue
+        # Apple Podcasts URL shape:
+        #   https://podcasts.apple.com/us/podcast/<slug>/id<show-id>?i=<trackId>
+        m = re.search(r"/podcast/([^/]+)/id\d+\?i=\d+", view_url)
+        slug = m.group(1) if m else None
+        out[guid] = {"apple_id": int(track_id), "slug": slug}
+    return out
+
+
+def load_apple_cache() -> dict[str, dict]:
+    """Load the persisted Apple Podcasts mapping from disk."""
+    if not APPLE_CACHE_PATH.exists():
+        return {}
+    try:
+        with open(APPLE_CACHE_PATH, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except (json.JSONDecodeError, OSError) as exc:
+        print(f"warn: apple cache unreadable, ignoring: {exc}", file=sys.stderr)
+        return {}
+
+
+def save_apple_cache(mapping: dict[str, dict]) -> None:
+    """Persist the Apple Podcasts mapping to disk."""
+    APPLE_CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(APPLE_CACHE_PATH, "w", encoding="utf-8") as f:
+        json.dump(mapping, f, indent=2, sort_keys=True)
+
+
+def anchor_url_from_spotify(spotify_url: str) -> str | None:
+    """Derive an Anchor.fm per-episode URL from a Spotify for Creators URL.
+
+    Spotify for Creators episode URLs have the shape
+        https://podcasters.spotify.com/pod/show/<host>/episodes/<Slug>-e<id>
+    Anchor.fm episode URLs have the shape
+        https://anchor.fm/<host>/episodes/<Slug>-e<id>
+    We swap the host portion.
+    """
+    m = re.match(
+        r"^https?://podcasters\.spotify\.com/pod/show/([^/]+)/episodes/(.+)$",
+        spotify_url,
+    )
+    if not m:
+        return None
+    host, slug_id = m.group(1), m.group(2)
+    return f"https://anchor.fm/{host}/episodes/{slug_id}"
+
+
 def parse_episodes(xml_bytes: bytes) -> list[dict]:
     # Anchor publishes the iTunes namespace as http (not https). Use http
     # here so the ElementTree find matches; we also fall back to a
@@ -71,6 +159,7 @@ def parse_episodes(xml_bytes: bytes) -> list[dict]:
         link_el = item.find("link")
         pub_el = item.find("pubDate")
         dur_el = item.find("itunes:duration", ns_map)
+        guid_el = item.find("guid")
         if dur_el is None:
             # Fallback: walk children and match by local name.
             for child in item:
@@ -81,6 +170,7 @@ def parse_episodes(xml_bytes: bytes) -> list[dict]:
         link = (link_el.text or "").strip() if link_el is not None else ""
         pub = (pub_el.text or "").strip() if pub_el is not None else ""
         dur = (dur_el.text or "").strip() if dur_el is not None else ""
+        guid = (guid_el.text or "").strip() if guid_el is not None else ""
         if not title or not link:
             continue
         out.append({
@@ -88,6 +178,7 @@ def parse_episodes(xml_bytes: bytes) -> list[dict]:
             "link": link,
             "pub": pub,
             "duration": dur,
+            "guid": guid,
         })
     return out
 
@@ -119,15 +210,54 @@ def fmt_duration(dur: str) -> str:
     return dur
 
 
-def render_episodes_block(eps: list[dict], total: int) -> str:
+def render_episodes_block(eps: list[dict], total: int, apple_map: dict[str, dict]) -> str:
     rows = []
     for i, ep in enumerate(eps, start=1):
+        apple = apple_map.get(ep.get("guid") or "")
+        spotify_url = ep["link"]
+        anchor_url = anchor_url_from_spotify(spotify_url)
+
+        # Build the platforms <ul>. Apple is conditional on having the ID.
+        platforms = []
+        if apple and apple.get("apple_id") and apple.get("slug"):
+            apple_url = (
+                f"https://podcasts.apple.com/us/podcast/"
+                f"{apple['slug']}/id1663479533"
+                f"?i={apple['apple_id']}&uo=4"
+            )
+            platforms.append(
+                f'        <li><a href="{html.escape(apple_url)}" '
+                f'aria-label="Listen on Apple Podcasts" rel="noopener">'
+                f'<span aria-hidden="true">&#9635;</span>'
+                f'<span class="sr-only">Apple Podcasts</span></a></li>'
+            )
+        if spotify_url:
+            platforms.append(
+                f'        <li><a href="{html.escape(spotify_url)}" '
+                f'aria-label="Listen on Spotify" rel="noopener">'
+                f'<span aria-hidden="true">&#9673;</span>'
+                f'<span class="sr-only">Spotify</span></a></li>'
+            )
+        if anchor_url:
+            platforms.append(
+                f'        <li><a href="{html.escape(anchor_url)}" '
+                f'aria-label="Listen on Anchor" rel="noopener">'
+                f'<span aria-hidden="true">&#9680;</span>'
+                f'<span class="sr-only">Anchor</span></a></li>'
+            )
+        platforms_html = (
+            f'\n              <ul class="ep-platforms" aria-label="Listen on">'
+            + "\n" + "\n".join(platforms) + "\n              </ul>"
+            if platforms else ""
+        )
+
         rows.append(
             f'          <li class="episode">\n'
             f'            <span class="ep-no">№&nbsp;{total - i + 1:03d}</span>\n'
             f'            <div class="ep-body">\n'
             f'              <h3 class="ep-title">{html.escape(ep["title"])}</h3>\n'
-            f'              <p class="ep-meta">{html.escape(fmt_date(ep["pub"]))} · {html.escape(fmt_duration(ep["duration"]))} · <a href="{html.escape(ep["link"])}" rel="noopener">listen</a></p>\n'
+            f'              <p class="ep-meta">{html.escape(fmt_date(ep["pub"]))} · {html.escape(fmt_duration(ep["duration"]))}</p>\n'
+            f'{platforms_html}\n'
             f'            </div>\n'
             f'          </li>'
         )
@@ -223,8 +353,21 @@ def main() -> int:
     latest = eps[:N_EPISODES]
     total = len(eps)
 
+    # Apple Podcasts per-episode IDs: load persisted cache, merge with
+    # any fresh data from the iTunes Lookup API, write back if merged.
+    cached = load_apple_cache()
+    fresh = fetch_apple_episode_ids()
+    if fresh:
+        merged = {**cached, **fresh}  # fresh wins
+        if merged != cached:
+            save_apple_cache(merged)
+            cached = merged
+        print(f"apple: {len(merged)} total ({len(fresh)} fresh)")
+    else:
+        print(f"apple: {len(cached)} from cache (API unreachable or empty)")
+
     # Compute new content for each auto-managed region.
-    new_ep_block = render_episodes_block(latest, total)
+    new_ep_block = render_episodes_block(latest, total, cached)
     new_marquee = render_marquee_items(eps[:12])
     new_epcount = str(total)
     new_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
