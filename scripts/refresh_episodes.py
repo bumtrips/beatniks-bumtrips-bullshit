@@ -47,6 +47,8 @@ LASTREFRESH_OPEN = "<!-- AUTO-LASTREFRESH -->"
 LASTREFRESH_CLOSE = "<!-- /AUTO-LASTREFRESH -->"
 EPCOUNT_OPEN = "<!-- AUTO-EPCOUNT -->"
 EPCOUNT_CLOSE = "<!-- /AUTO-EPCOUNT -->"
+MARQUEE_OPEN = "<!-- AUTO-MARQUEE -->"
+MARQUEE_CLOSE = "<!-- /AUTO-MARQUEE -->"
 
 
 def fetch_rss(url: str) -> bytes:
@@ -165,6 +167,33 @@ def replace_inline(text: str, open_marker: str, close_marker: str, new_content: 
     return pattern.sub(f"{open_marker}{new_content}{close_marker}", text, count=1)
 
 
+def extract_region(text: str, start: str, end: str) -> str | None:
+    """Return the inner content between start/end markers, or None if absent."""
+    pattern = re.compile(
+        re.escape(start) + r"(.*?)" + re.escape(end),
+        re.DOTALL,
+    )
+    m = pattern.search(text)
+    return m.group(1) if m else None
+
+
+def extract_inline(text: str, open_marker: str, close_marker: str) -> str | None:
+    """Return the inner content between inline open/close markers, or None."""
+    pattern = re.compile(
+        re.escape(open_marker) + r"(.*?)" + re.escape(close_marker),
+        re.DOTALL,
+    )
+    m = pattern.search(text)
+    return m.group(1) if m else None
+
+
+def _norm(s: str | None) -> str:
+    """Strip + collapse whitespace for a stable content comparison."""
+    if s is None:
+        return ""
+    return re.sub(r"\s+", " ", s).strip()
+
+
 def current_head_sha() -> str | None:
     try:
         return subprocess.check_output(
@@ -194,30 +223,43 @@ def main() -> int:
     latest = eps[:N_EPISODES]
     total = len(eps)
 
-    # 1. Episodes block.
-    ep_block = render_episodes_block(latest, total)
-    new_text = replace_region(original, EPISODES_START, EPISODES_END, ep_block)
+    # Compute new content for each auto-managed region.
+    new_ep_block = render_episodes_block(latest, total)
+    new_marquee = render_marquee_items(eps[:12])
+    new_epcount = str(total)
+    new_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    # 2. Last-refresh timestamp.
-    ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    new_text = replace_inline(new_text, LASTREFRESH_OPEN, LASTREFRESH_CLOSE, ts)
+    # Read current content from each region (whitespace-normalised for
+    # a stable comparison that ignores incidental formatting drift).
+    cur_ep_block = _norm(extract_region(original, EPISODES_START, EPISODES_END))
+    cur_marquee  = _norm(extract_inline(original, MARQUEE_OPEN, MARQUEE_CLOSE))
+    cur_epcount  = _norm(extract_inline(original, EPCOUNT_OPEN, EPCOUNT_CLOSE))
 
-    # 3. Episode count.
-    new_text = replace_inline(new_text, EPCOUNT_OPEN, EPCOUNT_CLOSE, str(total))
+    content_changed = (
+        _norm(new_ep_block) != cur_ep_block or
+        _norm(new_marquee)  != cur_marquee or
+        _norm(new_epcount)  != cur_epcount
+    )
 
-    # 4. Marquee items (latest 12 for the scrolling strip).
-    marquee_titles = render_marquee_items(eps[:12])
-    MARQUEE_OPEN = "<!-- AUTO-MARQUEE -->"
-    MARQUEE_CLOSE = "<!-- /AUTO-MARQUEE -->"
-    new_text = replace_inline(new_text, MARQUEE_OPEN, MARQUEE_CLOSE, marquee_titles)
+    # If nothing actually changed, leave the file alone — including the
+    # timestamp. The CI workflow will see no diff and skip the commit.
+    if not content_changed:
+        print(f"no change ({total} episodes; content unchanged since last refresh)")
+        return 0
+
+    # Otherwise, write all four regions.
+    new_text = replace_region(original, EPISODES_START, EPISODES_END, new_ep_block)
+    new_text = replace_inline(new_text, LASTREFRESH_OPEN, LASTREFRESH_CLOSE, new_ts)
+    new_text = replace_inline(new_text, EPCOUNT_OPEN, EPCOUNT_CLOSE, new_epcount)
+    new_text = replace_inline(new_text, MARQUEE_OPEN, MARQUEE_CLOSE, new_marquee)
 
     if new_text == original:
-        print(f"no change ({total} episodes; {ts})")
+        print(f"no change ({total} episodes; content unchanged since last refresh)")
         return 0
 
     with open(index_path, "w", encoding="utf-8") as f:
         f.write(new_text)
-    print(f"updated: {total} episodes, {len(latest)} shown, refresh={ts}")
+    print(f"updated: {total} episodes, {len(latest)} shown, refresh={new_ts}")
     return 0
 
 
