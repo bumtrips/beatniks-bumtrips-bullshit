@@ -1,0 +1,19 @@
+name: Other
+description: Anything that doesn't fit the bug or content templates.
+title: ""
+labels: []
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tell us what's on your mind.
+
+  - type: textarea
+    id: message
+    attributes:
+      label: What's up?
+      placeholder: |
+        Idea for a new theme, feature request, general feedback, etc.
+    validations:
+      required: true

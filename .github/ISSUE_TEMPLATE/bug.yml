@@ -1,0 +1,88 @@
+name: Site bug
+description: Something on bumtrips.com is broken — wrong link, broken layout, console error, accessibility issue.
+title: "[bug] "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please include as much of the following as
+        you can — it makes fixing much faster.
+
+  - type: input
+    id: url
+    attributes:
+      label: URL where the bug happens
+      description: The exact page or section. Use the site URL or a path like `/episodes`.
+      placeholder: https://bumtrips.com/#listen
+    validations:
+      required: true
+
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Which theme was active
+      description: If the bug is theme-specific, pick the theme you saw. If unsure, pick "not theme-specific".
+      options:
+        - cyber
+        - zine
+        - radio
+        - desert
+        - temple
+        - brutalist
+        - not theme-specific
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome / Chromium
+        - Firefox
+        - Safari
+        - Edge
+        - Other
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: OS / device
+      placeholder: macOS 14, iPhone 13, Android 14, etc.
+    validations:
+      required: false
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: What happened
+      description: Describe what you saw. For layout issues, mention your viewport size. For console errors, paste the error.
+      placeholder: |
+        The episode list shows the wrong audio URL on /episodes when the
+        brutalist theme is active.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+      placeholder: |
+        The audio URL should match what's on Anchor.fm.
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      placeholder: |
+        Screenshots, screen recordings, links to similar issues, etc.
+    validations:
+      required: false

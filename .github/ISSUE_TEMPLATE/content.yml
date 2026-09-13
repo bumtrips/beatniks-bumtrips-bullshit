@@ -1,0 +1,65 @@
+name: Content correction
+description: Fix a typo, missing episode, wrong show notes, bad link, or anything in the episode data on bumtrips.com.
+title: "[content] "
+labels: ["content"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for problems with what's on the page — text, links,
+        episode titles, descriptions, dates — not layout or visual bugs
+        (use the `Site bug` template for those).
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of issue?
+      options:
+        - Typo or wording
+        - Wrong episode title
+        - Wrong episode description / show notes
+        - Missing episode
+        - Wrong audio link
+        - Wrong platform link (Apple, Spotify, RSS)
+        - Wrong release date or episode number
+        - Other
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: episode
+    attributes:
+      label: Episode (if applicable)
+      description: The episode title or number. Leave blank if not about a specific episode.
+      placeholder: "Bottled At The Source"
+    validations:
+      required: false
+
+  - type: input
+    id: url
+    attributes:
+      label: URL where the problem shows
+      placeholder: https://bumtrips.com/#episodes
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: What's there now
+      placeholder: |
+        Show notes currently read: "Field recorded in Marakesh in 1992..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed
+    attributes:
+      label: What it should say (or what the correct source is)
+      placeholder: |
+        It should read: "Field recorded in Marrakech in 1992..."
+        Source: https://anchor.fm/.../episodes/...
+    validations:
+      required: true

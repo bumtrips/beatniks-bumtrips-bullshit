@@ -1,0 +1,40 @@
+Copyright © 2026 bumtrips. All rights reserved.
+
+This repository contains the source for the marketing website at
+<https://bumtrips.com> for the Beatniks, Bumtrips, Bullshit podcast.
+
+All audio, episode titles, descriptions, show art, the podcast name, the
+"Bumtrips" mark, and the brand identity are the property of the show
+and its hosts and are not licensed for redistribution, modification, or
+reuse without prior written permission.
+
+The HTML, CSS, and JavaScript in this repository are not licensed for
+reuse. They are published as the published source of the public website
+and may not be copied, forked for redistribution, or used as the basis
+for derivative works without prior written permission.
+
+You may, of course:
+
+  - View the source in your browser while visiting bumtrips.com.
+  - Link to <https://bumtrips.com>.
+  - Quote brief excerpts (titles, episode descriptions) for the purpose
+    of commentary, criticism, or review, in line with fair-use norms.
+
+You may not, without prior written permission:
+
+  - Redistribute the source files in this repository.
+  - Host a copy of the site, in whole or in part, at any other URL.
+  - Use the "bumtrips" mark, the podcast name, or the cover artwork for
+    any commercial purpose.
+  - Reuse the audio.
+
+For permission requests, use the contact form at
+<https://bumtrips.com/#contact>.
+
+THE SOFTWARE AND AUDIO ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
