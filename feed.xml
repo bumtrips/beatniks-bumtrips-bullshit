@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Placeholder RSS feed for Beatniks, Bumtrips, Bullshit.
+  This file is a redirect / pointer to the real RSS feed hosted on Anchor.
+  If your podcast app doesn't auto-follow this, use the URL directly:
 
-  The marketing team will swap this for the real feed once the client
-  publishes it. Until then, this file exists so that the "RSS" link on
-  the landing page resolves to a valid XML document instead of a 404.
+    https://anchor.fm/s/4431c4ac/podcast/rss
+
+  We keep this file in the repo so the in-page "RSS" link resolves to a
+  valid XML document instead of a 404, and so search engines / feed
+  readers that auto-discover /feed.xml find a hint.
 -->
-<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+<rss version="2.0">
   <channel>
-    <title>Beatniks, Bumtrips, Bullshit</title>
-    <link>https://studio2201.github.io/beatniks-bumtrips-bullshit/</link>
-    <description>A field-recorded journey through literature, consciousness, and counterculture.</description>
-    <language>en-us</language>
-    <itunes:author>Beatniks, Bumtrips, Bullshit</itunes:author>
-    <itunes:explicit>false</itunes:explicit>
-    <!-- Episodes go here once published -->
+    <title>Beatniks, Bumtrips, Bullshit — RSS pointer</title>
+    <link>https://anchor.fm/s/4431c4ac/podcast/rss</link>
+    <description>
+      The real RSS feed for this show lives on Anchor. Please subscribe at:
+      https://anchor.fm/s/4431c4ac/podcast/rss
+    </description>
   </channel>
 </rss>

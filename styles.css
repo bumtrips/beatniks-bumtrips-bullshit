@@ -340,7 +340,149 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .btn { transition: none; }
-  .ai-dot { animation: none; }
+  .ai-dot, .dial-dot, .typewriter-caret { animation: none; }
+  .scanlines, .transmission-glitch { display: none; }
+}
+
+/* ---------- CRT scanlines (subtle, fixed overlay) ---------- */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* ---------- Transmission glitch (rare, CSS-only) ---------- */
+.transmission-glitch {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: rgba(200, 255, 0, 0.04);
+  opacity: 0;
+}
+body.glitch-on .transmission-glitch {
+  animation: glitch-flash 110ms steps(2, end);
+}
+@keyframes glitch-flash {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  40%  { opacity: 0.4; }
+  60%  { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+body.glitch-on {
+  animation: glitch-rgb 110ms steps(2, end);
+}
+@keyframes glitch-rgb {
+  0%   { filter: none; }
+  50%  { filter: hue-rotate(20deg) saturate(1.4); }
+  100% { filter: none; }
+}
+
+/* ---------- Broadcast dial (header) ---------- */
+.broadcast-dial {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-mute);
+  background: var(--bg-elev);
+}
+.broadcast-dial .dial-freq {
+  color: var(--accent-3);
+  font-weight: 700;
+}
+.broadcast-dial .dial-label {
+  color: var(--fg);
+}
+.dial-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent-3);
+  display: inline-block;
+  animation: ai-pulse 3s ease-in-out infinite;
+}
+
+/* ---------- Typewriter tagline ---------- */
+.typewriter {
+  display: inline;
+  color: var(--accent-3);
+}
+.typewriter-caret {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--accent);
+  animation: caret-blink 0.9s steps(2, end) infinite;
+}
+@keyframes caret-blink {
+  50% { opacity: 0; }
+}
+
+/* ---------- ASCII art (in #how) ---------- */
+.ascii-art {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  line-height: 1.2;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--accent);
+  overflow-x: auto;
+  white-space: pre;
+}
+.ascii-art code { font: inherit; color: inherit; background: transparent; }
+
+/* ---------- Episodes "more" link ---------- */
+.ep-more {
+  margin: 1.2rem 0 0;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--fg-mute);
+}
+.ep-more a { color: var(--fg); }
+.ep-more a:hover { color: var(--accent); }
+
+/* ---------- Konami easter-egg message ---------- */
+.konami-msg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-elev);
+  border: 1.5px solid var(--accent);
+  border-radius: 10px;
+  padding: 14px 22px;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  box-shadow: 0 0 32px rgba(200, 255, 0, 0.4);
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+.konami-msg.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* ---------- AI badge (header) ---------- */
