@@ -11,9 +11,8 @@ no server-side code, no database, no API, and no authentication.
 - It does not handle authentication, payments, or PII.
 - It does not accept file uploads or user-submitted content directly.
 
-The only forms on the site are links to external podcast platforms
-(Apple, Spotify, Anchor) and a static contact form that opens the user's
-mail client.
+The only outbound interaction on the site is links to external podcast
+platforms (Apple, Spotify, Anchor) and the RSS feed URL.
 
 ## What can still be reported
 
