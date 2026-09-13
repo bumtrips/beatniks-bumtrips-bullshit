@@ -18,6 +18,8 @@ Spontaneous conversations about mysticism, poetry, art, music, total bullshit, s
 
 ## Marketing site
 
+**Live:** [https://bumtrips.com](https://bumtrips.com)
+
 The landing page lives at the repo root and is served via GitHub Pages:
 
 - `index.html` — landing page
