@@ -159,6 +159,31 @@ a:focus-visible {
 }
 .primary-nav a:hover { color: var(--fg); text-decoration: none; }
 
+.theme-cycle-btn {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  margin-left: 6px;
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 150ms ease, color 150ms ease, transform 80ms ease;
+}
+.theme-cycle-btn:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+.theme-cycle-btn:active {
+  transform: scale(0.94);
+}
+
 /* ---------- HERO ---------- */
 .hero {
   padding: 8vh 0 10vh;
@@ -680,22 +705,37 @@ body.glitch-on {
 @media (max-width: 480px) {
   /* P2.1: Hero art is bounded on phones so it doesn't dwarf the headline. */
   .hero-art { max-width: 280px; margin: 0 auto; }
-  /* P2.2: Brand-name truncates on narrow viewports to keep nav visible. */
+  /* P2.2: Brand-name truncates so the nav fits. */
   .brand-name {
-    max-width: 50vw;
+    max-width: 28vw;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 0.78rem;
   }
-  .header-wrap { gap: 12px; }
+  .header-wrap {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  /* Tighten nav so 4 items fit alongside the truncated brand. */
+  .primary-nav { gap: 0; flex-shrink: 0; }
+  .primary-nav a {
+    font-size: 0.68rem;
+    padding: 10px 4px;
+    letter-spacing: 0.04em;
+    min-height: 44px;
+  }
   /* P2.4: Pull-quote scales down on small screens. */
   .pull { font-size: clamp(1.25rem, 4.5vw, 1.6rem); }
-  /* Shrink primary-nav link font slightly so 4 items fit at 320 px. */
-  .primary-nav a { font-size: 0.78rem; padding: 12px 6px; }
-  .primary-nav { gap: 4px; }
   .display { font-size: clamp(2.2rem, 10vw, 4rem); }
   .display.sm { font-size: clamp(1.7rem, 6vw, 2.6rem); }
   .code-fence, .ascii-art { font-size: 0.72rem; }
+}
+/* At very narrow widths (<380 px, e.g. iPhone SE 1st gen), drop "Bumtrips · Bullshit"
+   entirely — keep just the brand mark + nav. Brand-name becomes essentially the
+   initials, and the header collapses cleanly. */
+@media (max-width: 380px) {
+  .brand-name { display: none; }
 }
 
 /* ---------- P2.3: iOS safe-area-inset on sticky chrome + corner ticker ---------- */
@@ -1312,7 +1352,8 @@ html[data-theme="cyber"] { /* default :root above applies */ }
 }
 
 /* ---------- P1.5: prefers-contrast: more boost ---------- */
-/* When the OS reports increased contrast, push all themes toward high-contrast pairs. */
+/* When the OS reports increased contrast, push all themes toward high-contrast pairs.
+   Keep decorative overlays intact — they're textures, not text. */
 @media (prefers-contrast: more) {
   /* cyber */
   :root {
@@ -1346,8 +1387,6 @@ html[data-theme="cyber"] { /* default :root above applies */ }
     --fg-mute: #2a2a2a;
     --accent-2: #d6006b;
   }
-  /* Strip decorative overlays entirely. */
-  .scanlines, .transmission-glitch, .acid-invert, body::before { display: none !important; }
 }
 
 /* ---------- P0.7: forced-colors (Windows High Contrast Mode) ---------- */

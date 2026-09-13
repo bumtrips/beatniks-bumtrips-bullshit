@@ -88,6 +88,7 @@
         <a href="#listen">Listen</a>
         <a href="#episodes">Episodes</a>
         <a href="#contact">Contact</a>
+        <button type="button" id="theme-cycle" class="theme-cycle-btn" aria-label="Cycle to next theme">↻</button>
       </nav>
     </div>
   </header>
@@ -394,6 +395,8 @@
     <span class="lt-line">
       <span class="lt-signal">SIGNAL · LOCKED</span>
       <span aria-hidden="true">·</span>
+      <span class="lt-theme">theme: <span id="theme-name">cyber</span></span>
+      <span aria-hidden="true">·</span>
       <span class="lt-source">source: anchor.fm/s/4431c4ac/podcast/rss</span>
       <span aria-hidden="true">·</span>
       <span class="lt-epcount"><!-- AUTO-EPCOUNT -->226<!-- /AUTO-EPCOUNT -->&nbsp;episodes in feed</span>
@@ -564,11 +567,11 @@
     (function themes() {
       var THEMES = ['cyber', 'zine', 'radio', 'desert', 'temple', 'brutalist'];
       var TRIP_MS = 720;
-      var AUTO_MIN_MS = 60000;          // 1 min minimum between auto-rotations
-      var AUTO_RAND_MS = 90000;         // up to +1.5 min of randomness
-      var FIRST_AUTO_DELAY_MS = 12000;  // first auto-rotation after page load
-      var SCROLL_THRESHOLD_PX = 600;    // cumulative scroll distance to fire
-      var SCROLL_COOLDOWN_MS = 30000;   // 30s between scroll-triggered swaps
+      var AUTO_MIN_MS = 30000;          // 30s minimum between auto-rotations
+      var AUTO_RAND_MS = 30000;         // up to +30s of randomness
+      var FIRST_AUTO_DELAY_MS = 5000;   // first auto-rotation 5s after page load
+      var SCROLL_THRESHOLD_PX = 300;    // cumulative scroll distance to fire
+      var SCROLL_COOLDOWN_MS = 15000;   // 15s between scroll-triggered swaps
 
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var idx = 0;
@@ -624,7 +627,7 @@
         }, { passive: true });
       }
 
-      var btn = document.getElementById('theme-toggle');
+      var btn = document.getElementById('theme-cycle');
       if (btn) {
         btn.addEventListener('click', function () {
           apply(pickRandomNext(), true);
