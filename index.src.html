@@ -82,10 +82,10 @@
         <span class="brand-name">Beatniks · Bumtrips · Bullshit</span>
       </a>
 
-      <!-- Social proof readout. The count is auto-managed: AUTO-EPCOUNT is
-           rewritten by scripts/refresh_episodes.py on the daily run. -->
+      <!-- Social proof readout — rotates one item at a time (JS below).
+           Strings are hand-managed: only claim what's verifiable. -->
       <span class="dial">
-        <span class="rec-dot" aria-hidden="true"></span><!-- AUTO-EPCOUNT -->226<!-- /AUTO-EPCOUNT -->&nbsp;TRANSMISSIONS<span class="dial-tail">&nbsp;·&nbsp;EST.&nbsp;2020</span>
+        <span class="rec-dot" aria-hidden="true"></span><span class="dial-proof" id="dial-proof">★ 5.0 ON SPOTIFY · 9 RATINGS</span>
       </span>
 
       <button type="button" id="theme-cycle" class="theme-cycle-btn" aria-label="Cycle to next theme">↻</button>
@@ -586,6 +586,27 @@
       // Start at default (cyber). Auto-rotate kicks off after a beat.
       apply(0, false);
       if (!reduce) setTimeout(scheduleAuto, FIRST_AUTO_DELAY_MS);
+    })();
+
+    // 7. Header proof rotator — one social-proof item visible at a time,
+    //    crossfade between swaps. Only claim verifiable facts here.
+    (function proof() {
+      var el = document.getElementById('dial-proof');
+      if (!el) return;
+      var ITEMS = [
+        '★ 5.0 ON SPOTIFY · 9 RATINGS',
+        '9/9 RATINGS · FIVE STARS',
+        'ON THE AIR SINCE 2020'
+      ];
+      var i = 0;
+      setInterval(function () {
+        el.classList.add('out');
+        setTimeout(function () {
+          i = (i + 1) % ITEMS.length;
+          el.textContent = ITEMS[i];
+          el.classList.remove('out');
+        }, 320);
+      }, 6000);
     })();
   </script>
 </body>

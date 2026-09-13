@@ -184,8 +184,15 @@ a:focus-visible {
   color: var(--fg-mute);
   white-space: nowrap;
 }
-@media (max-width: 600px) {
-  .dial-tail { display: none; }
+.dial-proof {
+  display: inline-block;
+  min-width: 28ch;
+  transition: opacity 300ms ease;
+}
+.dial-proof.out { opacity: 0; }
+@media (max-width: 640px) {
+  .dial { font-size: 0.62rem; padding: 4px 9px; }
+  .dial-proof { min-width: 0; }
 }
 @media (max-width: 430px) {
   .dial { display: none; }
@@ -431,6 +438,7 @@ a:focus-visible {
   html { scroll-behavior: auto; }
   .btn { transition: none; }
   .typewriter-caret, .rec-dot { animation: none; }
+  .dial-proof { transition: none; }
   .marquee-track { animation: none; transform: none; }
   .hero, body { animation: none !important; filter: none !important; }
   .scanlines, .transmission-glitch, .acid-invert { display: none; }
