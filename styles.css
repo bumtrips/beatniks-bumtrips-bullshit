@@ -86,7 +86,8 @@ a:focus-visible {
   position: sticky;
   top: 0;
   z-index: 5;
-  background: rgba(11, 11, 11, 0.85);
+  /* Translucent + theme-aware: 88% of --bg, 12% transparent. */
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: saturate(140%) blur(8px);
   -webkit-backdrop-filter: saturate(140%) blur(8px);
   border-bottom: 1px solid var(--line);
@@ -840,7 +841,7 @@ html[data-theme="zine"] {
   --bg: #f3eee2;
   --bg-elev: #ebe3d0;
   --fg: #1a1a1a;
-  --fg-mute: #6b5e4f;
+  --fg-mute: #4a3f33;
   --accent: #c44b1e;
   --accent-2: #2d6e6e;
   --accent-3: #8b3a1e;

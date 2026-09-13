@@ -135,7 +135,7 @@ def render_episodes_block(eps: list[dict], total: int) -> str:
         f'{items}\n'
         f'        </ol>\n\n'
         f'        <p class="ep-more">\n'
-        f'          {total} episodes and counting. <a href="https://anchor.fm/s/4431c4ac/podcast/rss">Subscribe via RSS</a> for the full archive.\n'
+        f'          {total} episodes and counting. <a href="https://anchor.fm/s/4431c4ac/podcast/rss">Subscribe via RSS</a> for the full archive, or browse the <a href="https://podcasters.spotify.com/pod/show/jedidiah-jackson">Spotify archive</a>.\n'
         f'        </p>'
     )
     return block
