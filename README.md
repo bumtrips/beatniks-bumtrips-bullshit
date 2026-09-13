@@ -65,7 +65,7 @@ Auto-rotation: 30–60 s on a randomized timer + scroll-triggered swaps. A `↻`
     └── apple_episode_ids.json  # episode guid → Apple Podcasts ID cache (per-episode links)
 ```
 
-Episode data refreshes daily via the `refresh-episodes` GitHub Actions workflow, which fetches the public Anchor RSS feed, rewrites the `AUTO-*` marker regions in `index.src.html` (episode list, marquee titles, episode count, refresh timestamp), updates `data/apple_episode_ids.json`, then regenerates `index.html` via `scripts/minify.py` and commits the result.
+Episode data refreshes daily via the `refresh-episodes` GitHub Actions workflow, which fetches the public Anchor RSS feed, rewrites the `AUTO-*` marker regions in `index.src.html` (episode list, marquee titles), updates `data/apple_episode_ids.json`, then regenerates `index.html` via `scripts/minify.py` and commits the result.
 
 ---
 

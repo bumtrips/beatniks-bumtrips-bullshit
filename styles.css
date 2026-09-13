@@ -45,7 +45,7 @@ a:focus-visible {
 /* Inline-text-block links: distinguishable beyond color (axe link-in-text-block). */
 .rss-note a,
 .ep-more a,
-.live-ticker a,
+.footer-nav a,
 .site-footer .credit a {
   text-decoration: underline;
   text-decoration-color: rgba(255, 255, 255, 0.35);
@@ -53,7 +53,7 @@ a:focus-visible {
 }
 .rss-note a:hover,
 .ep-more a:hover,
-.live-ticker a:hover,
+.footer-nav a:hover,
 .site-footer .credit a:hover {
   text-decoration-color: var(--accent);
 }
@@ -139,11 +139,12 @@ a:focus-visible {
   font-size: 0.95rem;
 }
 .brand-name { white-space: nowrap; }
-.primary-nav {
+.footer-nav {
   display: flex;
-  gap: 22px;
+  flex-wrap: wrap;
+  gap: 4px 22px;
 }
-.primary-nav a {
+.footer-nav a {
   color: var(--fg-mute);
   font-family: var(--mono);
   font-size: 0.85rem;
@@ -155,7 +156,7 @@ a:focus-visible {
   display: inline-flex;
   align-items: center;
 }
-.primary-nav a:hover { color: var(--fg); text-decoration: none; }
+.footer-nav a:hover { color: var(--fg); text-decoration: none; }
 
 .theme-cycle-btn {
   background: transparent;
@@ -361,7 +362,7 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .btn { transition: none; }
-  .ai-dot, .dial-dot, .typewriter-caret, .lt-dot { animation: none; }
+  .ai-dot, .dial-dot, .typewriter-caret { animation: none; }
   .marquee-track { animation: none; transform: none; }
   .hero, body { animation: none !important; filter: none !important; }
   .scanlines, .transmission-glitch, .acid-invert { display: none; }
@@ -469,53 +470,7 @@ body.acid-on .acid-invert {
    Removed: the per-cover image already has its own palette per theme;
    layering chromatic-drift on top of real artwork muddies the colors. */
 
-/* ---------- Live ticker (factual status, near footer) ---------- */
-.live-ticker {
-  position: sticky;
-  bottom: 0;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 6vw;
-  background: var(--bg);
-  border-top: 1px solid var(--line);
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.06em;
-  color: var(--fg-mute);
-  white-space: nowrap;
-  overflow: hidden;
-}
-.live-ticker .lt-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: var(--accent);
-  display: inline-block;
-  animation: ai-pulse 2s ease-in-out infinite;
-}
-.live-ticker .lt-line {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.live-ticker .lt-signal { color: var(--accent); font-weight: 700; }
-.live-ticker .lt-line > span[aria-hidden] { opacity: 0.4; }
-.live-ticker a { color: var(--fg); }
-.live-ticker a:hover { color: var(--accent); }
-.live-ticker a, .live-ticker .lt-signal, .live-ticker .lt-source {
-  /* WCAG 2.5.5: tap targets ≥24x24 minimum; aim for 44 for primary links. */
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 6px;
-  min-height: 44px;
-}
-
 @media (max-width: 700px) {
-  .live-ticker { font-size: 0.66rem; padding: 6px 4vw; }
   .marquee { font-size: 0.7rem; }
 }
 
@@ -658,14 +613,6 @@ body.glitch-on {
     gap: 6px;
     flex-wrap: nowrap;
   }
-  /* Tighten nav so 4 items fit alongside the truncated brand. */
-  .primary-nav { gap: 0; flex-shrink: 0; }
-  .primary-nav a {
-    font-size: 0.68rem;
-    padding: 10px 4px;
-    letter-spacing: 0.04em;
-    min-height: 44px;
-  }
   /* P2.4: Pull-quote scales down on small screens. */
   .pull { font-size: clamp(1.25rem, 4.5vw, 1.6rem); }
   .display { font-size: clamp(2.2rem, 10vw, 4rem); }
@@ -680,10 +627,9 @@ body.glitch-on {
 
 /* ---------- P2.3: iOS safe-area-inset on sticky chrome + corner ticker ---------- */
 .site-header { padding-top: max(0px, env(safe-area-inset-top)); }
-.live-ticker { padding-bottom: max(8px, env(safe-area-inset-bottom)); }
 .receiving {
   right: max(18px, env(safe-area-inset-right));
-  bottom: max(64px, calc(64px + env(safe-area-inset-bottom)));
+  bottom: max(18px, env(safe-area-inset-bottom));
 }
 
 /* ---------- Konami easter-egg message ---------- */
@@ -911,8 +857,7 @@ html[data-theme="zine"] .scanlines,
 html[data-theme="zine"] .transmission-glitch,
 html[data-theme="zine"] .acid-invert { display: none; }
 html[data-theme="zine"] .ai-dot,
-html[data-theme="zine"] .dial-dot,
-html[data-theme="zine"] .lt-dot { background: var(--accent); }
+html[data-theme="zine"] .dial-dot { background: var(--accent); }
 html[data-theme="zine"] .btn { border-radius: 2px; }
 html[data-theme="zine"] .btn-primary { background: var(--accent); color: var(--bg); }
 /* Fix btn-ghost fg contrast: was var(--fg)=#1a1a1a on var(--bg-elev)=#ebe3d0 = 1.21 (invisible).
@@ -956,8 +901,7 @@ html[data-theme="radio"] body {
   text-shadow: 0 0 6px rgba(255, 176, 0, 0.35);
 }
 html[data-theme="radio"] .ai-dot,
-html[data-theme="radio"] .dial-dot,
-html[data-theme="radio"] .lt-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+html[data-theme="radio"] .dial-dot { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 html[data-theme="radio"] .btn { border-radius: 0; }
 html[data-theme="radio"] .btn-primary { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
 html[data-theme="radio"] .btn-primary:hover { background: var(--accent); color: var(--bg); }
@@ -1003,8 +947,7 @@ html[data-theme="desert"] .scanlines,
 html[data-theme="desert"] .transmission-glitch,
 html[data-theme="desert"] .acid-invert { display: none; }
 html[data-theme="desert"] .ai-dot,
-html[data-theme="desert"] .dial-dot,
-html[data-theme="desert"] .lt-dot { background: var(--accent); }
+html[data-theme="desert"] .dial-dot { background: var(--accent); }
 html[data-theme="desert"] .btn { border-radius: 4px; }
 html[data-theme="desert"] .btn-primary { background: var(--accent); color: var(--bg); }
 /* Fix btn-ghost contrast (was 1.44:1 on bg-elev). Make it transparent. */
@@ -1050,8 +993,7 @@ html[data-theme="temple"] body::before {
 }
 html[data-theme="temple"] body { text-shadow: 0 0 12px rgba(212, 175, 55, 0.18); }
 html[data-theme="temple"] .ai-dot,
-html[data-theme="temple"] .dial-dot,
-html[data-theme="temple"] .lt-dot {
+html[data-theme="temple"] .dial-dot {
   background: var(--accent);
   box-shadow: 0 0 10px var(--accent);
 }
@@ -1105,8 +1047,7 @@ html[data-theme="brutalist"] .scanlines,
 html[data-theme="brutalist"] .transmission-glitch,
 html[data-theme="brutalist"] .acid-invert { display: none; }
 html[data-theme="brutalist"] .ai-dot,
-html[data-theme="brutalist"] .dial-dot,
-html[data-theme="brutalist"] .lt-dot { background: var(--accent-2); }
+html[data-theme="brutalist"] .dial-dot { background: var(--accent-2); }
 html[data-theme="brutalist"] .btn {
   border-radius: 0;
   background: var(--bg);

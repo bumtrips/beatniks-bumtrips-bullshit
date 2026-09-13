@@ -7,7 +7,7 @@ What this does
 1. Fetches the live Anchor.fm RSS feed for the show.
 2. Parses the latest N episodes (title, pubDate, duration, link).
 3. Renders an HTML block (ordered list + an "ep-count / archive" footer).
-4. Updates four marker regions inside `index.src.html`:
+4. Updates whichever marker regions exist inside `index.src.html`:
    - <!-- AUTO-EPISODES-START --> ... <!-- AUTO-EPISODES-END -->
        → ordered list of latest N episodes
    - <!-- AUTO-MARQUEE -->...<!-- /AUTO-MARQUEE -->
@@ -16,6 +16,10 @@ What this does
        → current ISO 8601 UTC timestamp
    - <!-- AUTO-EPCOUNT -->N<!-- /AUTO-EPCOUNT -->
        → integer episode count from the feed
+
+   Regions whose markers are absent from the file are skipped — they may
+   have been removed deliberately from the page (e.g. the old footer
+   ticker's AUTO-EPCOUNT / AUTO-LASTREFRESH spans).
 
 `index.src.html` is the source of truth; `index.html` is generated from
 it by `scripts/minify.py` (which preserves the markers). Always run this
@@ -378,16 +382,17 @@ def main() -> int:
     new_epcount = str(total)
     new_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    # Read current content from each region (whitespace-normalised for
-    # a stable comparison that ignores incidental formatting drift).
-    cur_ep_block = _norm(extract_region(original, EPISODES_START, EPISODES_END))
-    cur_marquee  = _norm(extract_inline(original, MARQUEE_OPEN, MARQUEE_CLOSE))
-    cur_epcount  = _norm(extract_inline(original, EPCOUNT_OPEN, EPCOUNT_CLOSE))
+    # Read current content from each region that exists in the file
+    # (whitespace-normalised for a stable comparison that ignores
+    # incidental formatting drift). Absent markers → region skipped.
+    cur_ep_block = _norm(extract_region(original, EPISODES_START, EPISODES_END)) if EPISODES_START in original else None
+    cur_marquee  = _norm(extract_inline(original, MARQUEE_OPEN, MARQUEE_CLOSE)) if MARQUEE_OPEN in original else None
+    cur_epcount  = _norm(extract_inline(original, EPCOUNT_OPEN, EPCOUNT_CLOSE)) if EPCOUNT_OPEN in original else None
 
     content_changed = (
-        _norm(new_ep_block) != cur_ep_block or
-        _norm(new_marquee)  != cur_marquee or
-        _norm(new_epcount)  != cur_epcount
+        (cur_ep_block is not None and _norm(new_ep_block) != cur_ep_block) or
+        (cur_marquee  is not None and _norm(new_marquee)  != cur_marquee) or
+        (cur_epcount  is not None and _norm(new_epcount)  != cur_epcount)
     )
 
     # If nothing actually changed, leave the file alone — including the
