@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Placeholder RSS feed for Beatniks, Bumtrips, Bullshit.
+
+  The marketing team will swap this for the real feed once the client
+  publishes it. Until then, this file exists so that the "RSS" link on
+  the landing page resolves to a valid XML document instead of a 404.
+-->
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
+  <channel>
+    <title>Beatniks, Bumtrips, Bullshit</title>
+    <link>https://studio2201.github.io/beatniks-bumtrips-bullshit/</link>
+    <description>A field-recorded journey through literature, consciousness, and counterculture.</description>
+    <language>en-us</language>
+    <itunes:author>Beatniks, Bumtrips, Bullshit</itunes:author>
+    <itunes:explicit>false</itunes:explicit>
+    <!-- Episodes go here once published -->
+  </channel>
+</rss>
