@@ -278,17 +278,17 @@ a:focus-visible {
   font-size: 0.9rem;
 }
 
-/* ---------- EPISODES ---------- */
-.episodes { padding: 8vh 0; border-bottom: 1px solid var(--line); }
+/* ---------- START HERE / FEATURED EPISODE ---------- */
+.start-here { padding: 5vh 0; border-bottom: 1px solid var(--line); }
 
-/* Curated "start here" card — sits above the auto-managed recent list. */
+/* Curated "start here" card — hand-managed pick, sits right under the hero. */
 .featured-ep {
   border: 1px solid var(--line);
   border-left: 3px solid var(--accent);
   border-radius: var(--radius);
   background: var(--bg-elev);
   padding: 22px 24px;
-  margin: 0 0 2.4rem;
+  margin: 0;
 }
 .featured-ep .eyebrow { color: var(--accent); margin-bottom: 0.7rem; }
 .featured-ep-title {
@@ -318,6 +318,9 @@ a:focus-visible {
   margin: 0;
 }
 .featured-ep-links span[aria-hidden] { margin: 0 8px; opacity: 0.45; }
+
+/* ---------- EPISODES ---------- */
+.episodes { padding: 8vh 0; border-bottom: 1px solid var(--line); }
 .episode-list {
   list-style: none;
   padding: 0;
