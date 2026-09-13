@@ -46,7 +46,8 @@ a:focus-visible {
 .rss-note a,
 .ep-more a,
 .live-ticker a,
-.how-links a {
+.how-links a,
+.site-footer .credit a {
   text-decoration: underline;
   text-decoration-color: rgba(255, 255, 255, 0.35);
   text-underline-offset: 3px;
@@ -54,7 +55,8 @@ a:focus-visible {
 .rss-note a:hover,
 .ep-more a:hover,
 .live-ticker a:hover,
-.how-links a:hover {
+.how-links a:hover,
+.site-footer .credit a:hover {
   text-decoration-color: var(--accent);
 }
 
