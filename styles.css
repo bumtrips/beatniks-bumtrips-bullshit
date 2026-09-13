@@ -45,7 +45,6 @@ a:focus-visible {
 /* Inline-text-block links: distinguishable beyond color (axe link-in-text-block). */
 .rss-note a,
 .ep-more a,
-.footer-nav a,
 .site-footer .credit a {
   text-decoration: underline;
   text-decoration-color: rgba(255, 255, 255, 0.35);
@@ -53,7 +52,6 @@ a:focus-visible {
 }
 .rss-note a:hover,
 .ep-more a:hover,
-.footer-nav a:hover,
 .site-footer .credit a:hover {
   text-decoration-color: var(--accent);
 }
@@ -139,25 +137,6 @@ a:focus-visible {
   font-size: 0.95rem;
 }
 .brand-name { white-space: nowrap; }
-.footer-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 22px;
-}
-.footer-nav a {
-  color: var(--fg-mute);
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  /* WCAG 2.5.5 / Apple HIG: tap targets ≥44x44 px. */
-  padding: 14px 10px;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-}
-.footer-nav a:hover { color: var(--fg); text-decoration: none; }
-
 .theme-cycle-btn {
   background: transparent;
   border: 1px solid var(--line);
