@@ -28,7 +28,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&family=Special+Elite&family=Crimson+Pro:wght@400;600;700&family=Yeseva+One&family=Source+Sans+3:wght@400;600;700&family=Cinzel:wght@500;700&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -63,6 +63,11 @@
         <span class="dial-freq">TUNED</span>
         <span class="dial-label"><!-- AUTO-EPCOUNT -->226<!-- /AUTO-EPCOUNT -->&nbsp;ep</span>
       </span>
+
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Cycle theme">
+        <span class="theme-toggle-icon" aria-hidden="true">◐</span>
+        <span class="theme-toggle-label"><span id="theme-name">cyber</span></span>
+      </button>
 
       <nav class="primary-nav" aria-label="Primary">
         <a href="#about">About</a>
@@ -429,6 +434,52 @@
         setTimeout(fire, reduce ? 60000 : 7000 + Math.random() * 9000);
       }
       setTimeout(fire, 5500);
+    })();
+
+    // 7. Theme cycling — manual button + auto-rotate + acid-trip transition.
+    (function themes() {
+      var THEMES = ['cyber', 'zine', 'radio', 'desert', 'temple', 'brutalist'];
+      var TRIP_MS = 720;
+      var AUTO_MIN_MS = 18000;   // 18 s minimum between auto-rotations
+      var AUTO_RAND_MS = 32000;  // up to +32 s of randomness on top
+
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var idx = 0;
+      var autoTimer = null;
+      var root = document.documentElement;
+      var nameEl = document.getElementById('theme-name');
+
+      function apply(nextIdx, withTrip) {
+        idx = ((nextIdx % THEMES.length) + THEMES.length) % THEMES.length;
+        if (withTrip && !reduce) {
+          root.classList.add('tripping');
+          setTimeout(function () { root.classList.remove('tripping'); }, TRIP_MS);
+        }
+        root.setAttribute('data-theme', THEMES[idx]);
+        if (nameEl) nameEl.textContent = THEMES[idx];
+      }
+
+      function scheduleAuto() {
+        if (autoTimer) clearTimeout(autoTimer);
+        var delay = AUTO_MIN_MS + Math.random() * AUTO_RAND_MS;
+        autoTimer = setTimeout(function () {
+          apply(idx + 1, true);
+          scheduleAuto();
+        }, delay);
+      }
+
+      var btn = document.getElementById('theme-toggle');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          apply(idx + 1, true);
+          // Reset auto-rotate clock so the manual click counts as activity.
+          scheduleAuto();
+        });
+      }
+
+      // Start at default (cyber). Auto-rotate kicks off after 8 s.
+      apply(0, false);
+      if (!reduce) setTimeout(scheduleAuto, 8000);
     })();
   </script>
 </body>
