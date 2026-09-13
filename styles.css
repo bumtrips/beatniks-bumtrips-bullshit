@@ -411,7 +411,7 @@ html[data-theme="brutalist"] .hero-art-brutalist { display: block; }
   .btn { transition: none; }
   .ai-dot, .dial-dot, .typewriter-caret, .lt-dot { animation: none; }
   .marquee-track { animation: none; transform: none; }
-  .hero, .hero-art img, body { animation: none !important; filter: none !important; }
+  .hero, body { animation: none !important; filter: none !important; }
   .scanlines, .transmission-glitch, .acid-invert { display: none; }
 }
 
@@ -513,22 +513,9 @@ body.acid-on .acid-invert {
   100% { opacity: 0; }
 }
 
-/* ---------- Acid flashback #3: chromatic aberration on cover ---------- */
-.hero-art img {
-  animation: chromatic-drift 9s ease-in-out infinite;
-}
-@keyframes chromatic-drift {
-  0%, 100% {
-    filter:
-      drop-shadow( 0.5px  0    0 rgba(255, 62, 165, 0.0))
-      drop-shadow(-0.5px  0    0 rgba(200, 255, 0,   0.0));
-  }
-  50% {
-    filter:
-      drop-shadow( 2px   0    0 rgba(255, 62, 165, 0.35))
-      drop-shadow(-2px   0    0 rgba(200, 255, 0,   0.35));
-  }
-}
+/* ---------- Acid flashback #3: chromatic aberration on cover ----------
+   Removed: the per-cover image already has its own palette per theme;
+   layering chromatic-drift on top of real artwork muddies the colors. */
 
 /* ---------- Live ticker (factual status, near footer) ---------- */
 .live-ticker {
