@@ -7,8 +7,8 @@ name: Refresh episodes
 
 on:
   schedule:
-    # Mondays at 06:00 UTC
-    - cron: "0 6 * * 1"
+    # Daily at 06:00 UTC
+    - cron: "0 6 * * *"
   workflow_dispatch:
     # Manual trigger via the Actions tab — useful for one-off refreshes
     # after the show drops a batch of new episodes.
