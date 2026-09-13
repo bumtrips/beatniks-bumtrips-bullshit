@@ -277,7 +277,7 @@ def render_episodes_block(eps: list[dict], total: int, apple_map: dict[str, dict
         f'{items}\n'
         f'        </ol>\n\n'
         f'        <p class="ep-more">\n'
-        f'          {total} episodes and counting. <a href="https://anchor.fm/s/4431c4ac/podcast/rss">Subscribe via RSS</a> for the full archive, or browse the <a href="https://podcasters.spotify.com/pod/show/jedidiah-jackson">Spotify archive</a>.\n'
+        f'          {total} episodes and counting. <a href="https://anchor.fm/s/4431c4ac/podcast/rss">Subscribe via RSS</a> for the full archive, or browse the <a href="https://open.spotify.com/show/43GiaQy9E5rkp6LfzXrvAM">Spotify archive</a>.\n'
         f'        </p>'
     )
     return block
@@ -296,7 +296,9 @@ def replace_region(text: str, start: str, end: str, new_content: str) -> str:
         re.escape(start) + r".*?" + re.escape(end),
         re.DOTALL,
     )
-    return pattern.sub(f"{start}\n{new_content}\n{end}", text, count=1)
+    # Lambda replacement: new_content may contain backslashes (episode
+    # titles are user-authored) which re.sub would misinterpret as escapes.
+    return pattern.sub(lambda _: f"{start}\n{new_content}\n{end}", text, count=1)
 
 
 def replace_inline(text: str, open_marker: str, close_marker: str, new_content: str) -> str:
@@ -304,7 +306,7 @@ def replace_inline(text: str, open_marker: str, close_marker: str, new_content: 
         re.escape(open_marker) + r".*?" + re.escape(close_marker),
         re.DOTALL,
     )
-    return pattern.sub(f"{open_marker}{new_content}{close_marker}", text, count=1)
+    return pattern.sub(lambda _: f"{open_marker}{new_content}{close_marker}", text, count=1)
 
 
 def extract_region(text: str, start: str, end: str) -> str | None:

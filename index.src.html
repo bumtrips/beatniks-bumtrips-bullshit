@@ -13,7 +13,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Beatniks, Bumtrips, Bullshit" />
   <meta property="og:description" content="A field-recorded journey through literature, consciousness, and counterculture. Your secret audio dose of acid." />
-  <meta property="og:image" content="assets/og-card.png" />
+  <meta property="og:image" content="https://bumtrips.com/assets/og-card.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Beatniks, Bumtrips, Bullshit — A field-recorded journey. Cover art on the right, title in acid green and magenta on the left." />
@@ -24,7 +24,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Beatniks, Bumtrips, Bullshit" />
   <meta name="twitter:description" content="A field-recorded journey through literature, consciousness, and counterculture." />
-  <meta name="twitter:image" content="assets/og-card.png" />
+  <meta name="twitter:image" content="https://bumtrips.com/assets/og-card.png" />
   <meta name="twitter:image:alt" content="Beatniks, Bumtrips, Bullshit — A field-recorded journey. Cover art on the right, title in acid green and magenta on the left." />
 
   <!-- P3.3: Dedicated favicon + apple-touch-icon. -->
@@ -115,13 +115,14 @@
 
           <!-- START HERE — hand-managed pick. Swap title/meta/links/audio src to change it. -->
           <div id="start-here" class="featured-ep">
-            <p class="featured-ep-kicker"><span class="rec-dot" aria-hidden="true"></span>START HERE — NEW HERE? PRESS PLAY.</p>
-            <h3 class="featured-ep-title">Egyptian Speed</h3>
+            <p class="featured-ep-kicker"><span class="rec-dot" aria-hidden="true"></span>NEW HERE? START WITH THIS ONE.</p>
+            <h2 class="featured-ep-title">Egyptian Speed</h2>
             <p class="featured-ep-desc">
               A Luxor tour guide on Egyptian speed — Limitless, ultra mode,
               and what the ancient civilizations all had.
             </p>
             <audio class="featured-ep-audio" controls preload="none"
+                   aria-label="Play featured episode: Egyptian Speed"
                    src="https://anchor.fm/s/4431c4ac/podcast/play/116093295/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-1-26%2F418886665-44100-2-06185967a81ad.m4a"></audio>
             <p class="featured-ep-links">
               №&nbsp;222 · 33&nbsp;min · <a href="https://podcasters.spotify.com/pod/show/jedidiah-jackson/episodes/Egyptian-Speed-e3flctf" rel="noopener">Spotify</a><span aria-hidden="true">·</span><a href="https://podcasts.apple.com/us/podcast/egyptian-speed/id1663479533?i=1000757916411&amp;uo=4" rel="noopener">Apple</a><span aria-hidden="true">·</span><a href="https://anchor.fm/jedidiah-jackson/episodes/Egyptian-Speed-e3flctf" rel="noopener">Anchor</a>
@@ -129,8 +130,8 @@
           </div>
         </div>
 
-        <p class="tagline">
-          <span class="typewriter" id="tagline-typewriter" aria-live="polite"></span><span class="typewriter-caret" aria-hidden="true">▍</span>
+        <p class="tagline" aria-hidden="true">
+          <span class="typewriter" id="tagline-typewriter"></span><span class="typewriter-caret" aria-hidden="true">▍</span>
         </p>
 
         <p class="hero-meta">
@@ -188,7 +189,7 @@
       </div>
     </section>
 
-    <!-- EPISODES (placeholder grid — fill in as episodes are published) -->
+    <!-- EPISODES (latest N — auto-managed from the RSS feed) -->
     <section id="episodes" class="episodes" aria-labelledby="episodes-title">
       <div class="wrap">
         <p class="eyebrow">Recent transmissions</p>
@@ -303,7 +304,7 @@
         </ol>
 
         <p class="ep-more">
-          226 episodes and counting. <a href="https://anchor.fm/s/4431c4ac/podcast/rss">Subscribe via RSS</a> for the full archive, or browse the <a href="https://podcasters.spotify.com/pod/show/jedidiah-jackson">Spotify archive</a>.
+          226 episodes and counting. <a href="https://anchor.fm/s/4431c4ac/podcast/rss">Subscribe via RSS</a> for the full archive, or browse the <a href="https://open.spotify.com/show/43GiaQy9E5rkp6LfzXrvAM">Spotify archive</a>.
         </p>
 <!-- AUTO-EPISODES-END -->
       </div>
@@ -319,7 +320,7 @@
           any of the platforms above — that is how the show knows you are listening.
         </p>
         <div class="cta-row center">
-          <a class="btn btn-primary" href="https://podcasters.spotify.com/pod/show/jedidiah-jackson">Spotify archive</a>
+          <a class="btn btn-primary" href="https://open.spotify.com/show/43GiaQy9E5rkp6LfzXrvAM">Spotify archive</a>
           <a class="btn btn-ghost" href="https://anchor.fm/s/4431c4ac/podcast/rss">RSS</a>
           <a class="btn btn-ghost" href="#top">Back to top ↑</a>
         </div>
@@ -409,7 +410,7 @@
       tick();
     })();
 
-    // 3. Konami code easter egg: ↑↑↓↓←→←→BA reveals a transmission.
+    // 2. Konami code easter egg: ↑↑↓↓←→←→BA reveals a transmission.
     (function konami() {
       var seq = [38,38,40,40,37,39,37,39,66,65];
       var buf = [];
@@ -426,7 +427,7 @@
       });
     })();
 
-    // 4. Rare transmission glitch — toggle a class on <body> for ~120ms at random intervals.
+    // 3. Rare transmission glitch — toggle a class on <body> for ~120ms at random intervals.
     (function glitch() {
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;
@@ -438,7 +439,7 @@
       setTimeout(fire, 9000);
     })();
 
-    // 5. Acid flashbacks — rare full-page colour invert.
+    // 4. Acid flashbacks — rare full-page colour invert.
     (function acid() {
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;
@@ -450,9 +451,10 @@
       setTimeout(fire, 14000);
     })();
 
-    // 6. "Receiving" ticker — random signal phrases that flash in the corner.
+    // 5. "Receiving" ticker — random signal phrases that flash in the corner.
     (function receiving() {
       var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
       var phrases = [
         'RECEIVING · BERLIN ↔ SANTA CRUZ',
         'DECODING · 226 transmissions',
@@ -469,13 +471,13 @@
         var p = phrases[Math.floor(Math.random() * phrases.length)];
         node.textContent = '↳ ' + p;
         node.classList.add('show');
-        setTimeout(function () { node.classList.remove('show'); }, reduce ? 0 : 1800);
-        setTimeout(fire, reduce ? 60000 : 7000 + Math.random() * 9000);
+        setTimeout(function () { node.classList.remove('show'); }, 1800);
+        setTimeout(fire, 7000 + Math.random() * 9000);
       }
       setTimeout(fire, 5500);
     })();
 
-    // 7. Theme cycling — random theme picks, two triggers:
+    // 6. Theme cycling — random theme picks, two triggers:
     //    (a) auto-rotate timer (1-2.5 min between rotations)
     //    (b) scroll activity (600px cumulative within a 30s cooldown)
     //    Both fire the acid-trip transition. Either trigger resets
@@ -493,7 +495,6 @@
       var idx = 0;
       var autoTimer = null;
       var root = document.documentElement;
-      var nameEl = document.getElementById('theme-name');
 
       function pickRandomNext() {
         // Avoid landing on the current theme (would be a no-op trip).
@@ -508,10 +509,9 @@
       // Cyber is already loaded in <head>; the dedupe map prevents duplicates.
       var fontLoadUrls = {};
       function ensureThemeFonts(theme) {
+        if (theme === 'cyber') return; // cyber faces already load eagerly in <head>
         var url;
-        if (theme === 'cyber') {
-          url = 'https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Inter:wght@400&family=Space+Mono:wght@400;700&display=swap';
-        } else if (theme === 'zine') {
+        if (theme === 'zine') {
           url = 'https://fonts.googleapis.com/css2?family=Special+Elite&family=Crimson+Pro:wght@400&display=swap';
         } else if (theme === 'radio') {
           url = 'https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap';
@@ -538,7 +538,6 @@
           setTimeout(function () { root.classList.remove('tripping'); }, TRIP_MS);
         }
         root.setAttribute('data-theme', THEMES[idx]);
-        if (nameEl) nameEl.textContent = THEMES[idx];
         ensureThemeFonts(THEMES[idx]);
         // Any swap resets the auto-rotate clock.
         scheduleAuto();
