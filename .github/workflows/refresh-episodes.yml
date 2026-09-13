@@ -1,9 +1,10 @@
 name: Refresh episodes
 
-# Weekly refresh of the auto-managed episode list. The script fetches
+# Daily refresh of the auto-managed episode list. The script fetches
 # the live Anchor.fm RSS feed for the show and rewrites the
 # AUTO-EPISODES-* / AUTO-LASTREFRESH / AUTO-EPCOUNT / AUTO-MARQUEE
-# marker regions inside index.html.
+# marker regions inside index.src.html, then minify.py regenerates
+# the served index.html (and styles.min.css) from the source.
 
 on:
   schedule:
@@ -27,18 +28,23 @@ jobs:
       - name: Run refresh script
         run: |
           set -euo pipefail
-          python3 scripts/refresh_episodes.py index.html
+          python3 scripts/refresh_episodes.py index.src.html
+
+      - name: Regenerate index.html + styles.min.css
+        run: |
+          set -euo pipefail
+          python3 scripts/minify.py
 
       - name: Commit if changed
         run: |
           set -euo pipefail
-          if git diff --quiet -- index.html scripts/refresh_episodes.py .github/workflows/refresh-episodes.yml; then
+          git add index.src.html index.html styles.min.css data/apple_episode_ids.json
+          if git diff --cached --quiet; then
             echo "No changes to commit — feed matches what is already on the page."
           else
             git config user.name "bbb-episode-bot"
             git config user.email "bbb-episode-bot@users.noreply.github.com"
-            git add index.html
-            git commit -m "episodes: weekly refresh from anchor.fm RSS"
+            git commit -m "episodes: daily refresh from anchor.fm RSS"
             git push
             echo "Pushed episode refresh."
           fi

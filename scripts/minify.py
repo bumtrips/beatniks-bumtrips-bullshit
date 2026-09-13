@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
-"""Minify styles.css -> styles.min.css and rewrite index.html to load it
-and strip safe HTML comments. Conservative: preserves <script> and <style>
-contents verbatim; never touches conditional IE comments; collapses
-whitespace between tags only.
+"""Minify styles.css -> styles.min.css and index.src.html -> index.html
+(strip safe HTML comments, collapse inter-tag whitespace, point the
+stylesheet link at the minified CSS).
+
+index.src.html is the source of truth — edit that file, never index.html.
+AUTO-* marker comments are preserved in the output so
+scripts/refresh_episodes.py can locate its managed regions in either file.
+
+Conservative: preserves <script> and <style> contents verbatim; never
+touches conditional IE comments; collapses whitespace between tags only.
 """
 import re
 import sys
@@ -11,8 +17,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CSS_IN = ROOT / "styles.css"
 CSS_OUT = ROOT / "styles.min.css"
-HTML_IN = ROOT / "index.html"
-HTML_OUT = ROOT / "index.html"  # in-place
+HTML_IN = ROOT / "index.src.html"
+HTML_OUT = ROOT / "index.html"
 
 def minify_css(src: str) -> str:
     # 1. Strip /* ... */ comments (no nested /*, CSS has no strings with /).
@@ -33,11 +39,13 @@ def minify_css(src: str) -> str:
     # 7. Trim trailing/leading.
     return out.strip()
 
-# Keep comments that affect browser behavior or parsing.
+# Keep comments that affect browser behavior or parsing, plus the
+# AUTO-* region markers that refresh_episodes.py searches for.
 KEEP_PATTERNS = [
     re.compile(r"<!--\[if[\s\S]*?\]!>-->", re.I),  # IE downlevel-revealed
     re.compile(r"<!--\[endif\]-->", re.I),           # IE downlevel-hidden end
     re.compile(r"<!---->", re.I),                    # placeholder
+    re.compile(r"<!--\s*/?AUTO-[\w-]*\s*-->", re.I), # refresh_episodes markers
 ]
 
 def strip_html_comments(html: str) -> tuple[str, int]:
@@ -64,39 +72,44 @@ def strip_html_comments(html: str) -> tuple[str, int]:
     return "".join(out_chunks), removed
 
 def collapse_tag_whitespace(html: str) -> str:
-    # Collapse runs of whitespace between `>` and `<` (safe: not in text nodes).
-    # But do NOT touch whitespace inside <pre>, <code>, <textarea>.
-    # Walk linearly with a tag-aware filter.
+    # Collapse runs of whitespace between `>` and `<` only — whitespace
+    # before a text node is significant (it renders as a space), so emit a
+    # single space there instead of dropping it. Whitespace-sensitivity
+    # applies inside <pre>, <code>, <textarea>, <script>, and <style>;
+    # their contents pass through verbatim.
     out = []
     i = 0
     n = len(html)
-    pre_open = re.compile(r"<\s*(pre|code|textarea)[^>]*>", re.I)
-    pre_close = re.compile(r"</\s*(pre|code|textarea)\s*>", re.I)
-    in_pre = False
+    verbatim_open = re.compile(r"<\s*(pre|code|textarea|script|style)[^>]*>", re.I)
+    verbatim_close = re.compile(r"</\s*(pre|code|textarea|script|style)\s*>", re.I)
+    in_verbatim = False
     while i < n:
-        if not in_pre:
-            m = pre_open.match(html, i)
+        if not in_verbatim:
+            m = verbatim_open.match(html, i)
             if m:
-                in_pre = True
+                in_verbatim = True
                 out.append(html[i:m.end()])
                 i = m.end()
                 continue
         else:
-            m = pre_close.match(html, i)
+            m = verbatim_close.match(html, i)
             if m:
-                in_pre = False
+                in_verbatim = False
                 out.append(html[i:m.end()])
                 i = m.end()
                 continue
-        if not in_pre:
-            # Between `>` and `<`: collapse whitespace.
-            if html[i] == ">":
-                out.append(">")
-                j = i + 1
-                while j < n and html[j] in " \t\r\n":
-                    j += 1
+        if not in_verbatim and html[i] == ">":
+            out.append(">")
+            j = i + 1
+            while j < n and html[j] in " \t\r\n":
+                j += 1
+            if j < n and html[j] == "<":
+                i = j  # whitespace between tags: drop it
+            else:
+                if j > i + 1:
+                    out.append(" ")  # whitespace before text: keep one space
                 i = j
-                continue
+            continue
         out.append(html[i])
         i += 1
     return "".join(out)

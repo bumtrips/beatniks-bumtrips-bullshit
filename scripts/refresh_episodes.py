@@ -7,23 +7,29 @@ What this does
 1. Fetches the live Anchor.fm RSS feed for the show.
 2. Parses the latest N episodes (title, pubDate, duration, link).
 3. Renders an HTML block (ordered list + an "ep-count / archive" footer).
-4. Updates three marker regions inside `index.html`:
+4. Updates four marker regions inside `index.src.html`:
    - <!-- AUTO-EPISODES-START --> ... <!-- AUTO-EPISODES-END -->
        → ordered list of latest N episodes
+   - <!-- AUTO-MARQUEE -->...<!-- /AUTO-MARQUEE -->
+       → " · "-joined latest titles for the scrolling marquee
    - <!-- AUTO-LASTREFRESH -->...<!-- /AUTO-LASTREFRESH -->
        → current ISO 8601 UTC timestamp
    - <!-- AUTO-EPCOUNT -->N<!-- /AUTO-EPCOUNT -->
        → integer episode count from the feed
 
-Designed to be called by a weekly GitHub Actions cron (see
+`index.src.html` is the source of truth; `index.html` is generated from
+it by `scripts/minify.py` (which preserves the markers). Always run this
+script against the source file, then re-run minify.py.
+
+Designed to be called by a daily GitHub Actions cron (see
 .github/workflows/refresh-episodes.yml). Idempotent: if the rendered
 output equals what's already in the file, it exits 0 without rewriting.
 
 Usage
 -----
-    python3 scripts/refresh_episodes.py [INDEX_HTML_PATH]
+    python3 scripts/refresh_episodes.py [INDEX_SRC_PATH]
 
-Defaults to `index.html` in the repo root when run from CI.
+Defaults to `index.src.html` in the repo root when run from CI.
 """
 
 from __future__ import annotations
@@ -335,7 +341,7 @@ def current_head_sha() -> str | None:
 
 
 def main() -> int:
-    index_path = sys.argv[1] if len(sys.argv) > 1 else "index.html"
+    index_path = sys.argv[1] if len(sys.argv) > 1 else "index.src.html"
     if not os.path.exists(index_path):
         print(f"error: {index_path} not found", file=sys.stderr)
         return 2
