@@ -85,7 +85,7 @@
       <!-- Social proof readout — rotates one item at a time (JS below).
            Strings are hand-managed: only claim what's verifiable. -->
       <span class="dial">
-        <span class="rec-dot" aria-hidden="true"></span><span class="dial-proof" id="dial-proof">★ 5.0 ON SPOTIFY · 9 RATINGS</span>
+        <span class="rec-dot" aria-hidden="true"></span><span class="dial-proof" id="dial-proof">SPOTIFY ★5.0 · 9 RATINGS</span>
       </span>
 
       <button type="button" id="theme-cycle" class="theme-cycle-btn" aria-label="Cycle to next theme">↻</button>
@@ -121,13 +121,13 @@
 
           <!-- START HERE — hand-managed pick. Swap title/meta/links/audio src to change it. -->
           <div id="start-here" class="featured-ep">
-            <p class="featured-ep-kicker"><span class="rec-dot" aria-hidden="true"></span>NEW HERE? START WITH THIS ONE.</p>
+            <p class="featured-ep-kicker"><span class="rec-dot" aria-hidden="true"></span>NEW HERE? START HERE.</p>
             <h2 class="featured-ep-title">Egyptian Speed</h2>
             <p class="featured-ep-desc">
               A Luxor tour guide on Egyptian speed — Limitless, ultra mode,
               and what the ancient civilizations all had.
             </p>
-            <audio class="featured-ep-audio" controls preload="none"
+            <audio class="featured-ep-audio" controls preload="metadata"
                    aria-label="Play featured episode: Egyptian Speed"
                    src="https://anchor.fm/s/4431c4ac/podcast/play/116093295/https%3A%2F%2Fd3ctxlq1ktw2nl.cloudfront.net%2Fstaging%2F2026-1-26%2F418886665-44100-2-06185967a81ad.m4a"></audio>
             <p class="featured-ep-links">
@@ -357,10 +357,10 @@
 
       var QUOTES = [
         'Your secret audio dose of acid.',
-        'We record the moment where spirit makes its wild plunge into matter.',
+        'The moment spirit makes its wild plunge into matter.',
         'Raw sounds, real voices, and the rhythm of thought.',
         'Field-recorded transmissions from Berlin \u21C4 Santa Cruz.',
-        'Spontaneous conversations about mysticism, poetry, art, music, total bullshit.',
+        'Mysticism, poetry, art, music, total bullshit.',
         'How do you know when a place is alive?',
         'There are adventures around the world and other dimensions.',
         'An hour and a half on warm stone.',
@@ -593,8 +593,8 @@
     (function proof() {
       var el = document.getElementById('dial-proof');
       if (!el) return;
-      var ITEMS = [
-        '★ 5.0 ON SPOTIFY · 9 RATINGS',
+      var ITEMS = [ // keep ≤24 chars — the dial must fit a 360px-wide phone
+        'SPOTIFY ★5.0 · 9 RATINGS',
         '9/9 RATINGS · FIVE STARS',
         'ON THE AIR SINCE 2020'
       ];

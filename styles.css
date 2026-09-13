@@ -21,7 +21,11 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 body {
   background: var(--bg);
   color: var(--fg);
@@ -105,6 +109,7 @@ a:focus-visible {
   position: sticky;
   top: 0;
   z-index: 5;
+  background: var(--bg); /* fallback for browsers without color-mix (Safari <16.2) */
   /* Translucent + theme-aware: 88% of --bg, 12% transparent. */
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: saturate(140%) blur(8px);
@@ -186,15 +191,15 @@ a:focus-visible {
 }
 .dial-proof {
   display: inline-block;
-  min-width: 28ch;
+  /* longest proof string is 24ch — reserve it so the dial doesn't resize on swap */
+  min-width: 24ch;
   transition: opacity 300ms ease;
 }
 .dial-proof.out { opacity: 0; }
-@media (max-width: 640px) {
+@media (max-width: 700px) {
   .dial { font-size: 0.62rem; padding: 4px 9px; }
-  .dial-proof { min-width: 0; }
 }
-@media (max-width: 430px) {
+@media (max-width: 349px) {
   .dial { display: none; }
 }
 
@@ -662,11 +667,16 @@ body.glitch-on {
   .display { font-size: clamp(2.2rem, 10vw, 4rem); }
   .display.sm { font-size: clamp(1.7rem, 6vw, 2.6rem); }
 }
-/* At very narrow widths (<380 px, e.g. iPhone SE 1st gen), drop "Bumtrips · Bullshit"
-   entirely — keep just the brand mark + nav. Brand-name becomes essentially the
-   initials, and the header collapses cleanly. */
-@media (max-width: 380px) {
+/* On phone-width screens the brand name truncates mid-word ("Beatniks · B…")
+   and reads as broken — drop it. The BBB mark + h1 carry the identity;
+   the proof dial takes over the header's middle slot instead. */
+@media (max-width: 700px) {
   .brand-name { display: none; }
+  .receiving { display: none; }
+  .hero { padding: 4vh 0 6vh; }
+  /* Reserve 2 lines so the typewriter doesn't shift the CTA row on each quote. */
+  .tagline { margin-top: 1.5rem; min-height: 72px; }
+  .contact { padding: 6vh 0 9vh; }
 }
 
 /* ---------- P2.3: iOS safe-area-inset on sticky chrome ---------- */
