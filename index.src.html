@@ -33,9 +33,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
   <link rel="canonical" href="https://bumtrips.com/" />
 
-  <!-- LCP: preload the cyber cover (initial theme) so the hero paints fast. -->
-  <link rel="preload" as="image" href="assets/covers/cover-cyber.webp" type="image/webp" fetchpriority="high" />
-
   <!-- Fonts: only the cyber theme's faces load eagerly; each other theme
        lazy-loads its faces on first apply via ensureThemeFonts() below. -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -135,18 +132,6 @@
           </div>
         </div>
 
-        <figure class="hero-art-stack" aria-label="Cover artwork for Beatniks, Bumtrips, Bullshit">
-          <!-- Six AI-generated covers, one per theme. CSS shows only the one
-               matching the active data-theme; theme rotation swaps the actual
-               image, not just the palette. -->
-          <figure class="hero-art hero-art-cyber"    data-theme-art="cyber"    aria-hidden="true"><picture><source type="image/webp" srcset="assets/covers/cover-cyber-600.webp 600w, assets/covers/cover-cyber.webp 2048w" sizes="(max-width: 900px) 90vw, 540px" /><img src="assets/covers/cover-cyber.jpg" srcset="assets/covers/cover-cyber-600.jpg 600w, assets/covers/cover-cyber.jpg 2048w" sizes="(max-width: 900px) 90vw, 540px" alt="" loading="eager" fetchpriority="high" width="2048" height="1884" /></picture></figure>
-          <figure class="hero-art hero-art-zine"     data-theme-art="zine"     aria-hidden="true"><picture><source type="image/webp" srcset="assets/covers/cover-zine-600.webp 600w, assets/covers/cover-zine.webp 2048w" sizes="(max-width: 900px) 90vw, 540px" /><img src="assets/covers/cover-zine.jpg" srcset="assets/covers/cover-zine-600.jpg 600w, assets/covers/cover-zine.jpg 2048w" sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></picture></figure>
-          <figure class="hero-art hero-art-radio"    data-theme-art="radio"    aria-hidden="true"><picture><source type="image/webp" srcset="assets/covers/cover-radio-600.webp 600w, assets/covers/cover-radio.webp 2048w" sizes="(max-width: 900px) 90vw, 540px" /><img src="assets/covers/cover-radio.jpg" srcset="assets/covers/cover-radio-600.jpg 600w, assets/covers/cover-radio.jpg 2048w" sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></picture></figure>
-          <figure class="hero-art hero-art-desert"   data-theme-art="desert"   aria-hidden="true"><picture><source type="image/webp" srcset="assets/covers/cover-desert-600.webp 600w, assets/covers/cover-desert.webp 2048w" sizes="(max-width: 900px) 90vw, 540px" /><img src="assets/covers/cover-desert.jpg" srcset="assets/covers/cover-desert-600.jpg 600w, assets/covers/cover-desert.jpg 2048w" sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></picture></figure>
-          <figure class="hero-art hero-art-temple"   data-theme-art="temple"   aria-hidden="true"><picture><source type="image/webp" srcset="assets/covers/cover-temple-600.webp 600w, assets/covers/cover-temple.webp 2048w" sizes="(max-width: 900px) 90vw, 540px" /><img src="assets/covers/cover-temple.jpg" srcset="assets/covers/cover-temple-600.jpg 600w, assets/covers/cover-temple.jpg 2048w" sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></picture></figure>
-          <figure class="hero-art hero-art-brutalist" data-theme-art="brutalist" aria-hidden="true"><picture><source type="image/webp" srcset="assets/covers/cover-brutalist-600.webp 600w, assets/covers/cover-brutalist.webp 2048w" sizes="(max-width: 900px) 90vw, 540px" /><img src="assets/covers/cover-brutalist.jpg" srcset="assets/covers/cover-brutalist-600.jpg 600w, assets/covers/cover-brutalist.jpg 2048w" sizes="(max-width: 900px) 90vw, 540px" alt="" loading="lazy" width="2048" height="1884" /></picture></figure>
-          <figcaption aria-hidden="true">cover · 2026</figcaption>
-        </figure>
       </div>
     </section>
 
@@ -613,20 +598,6 @@
         document.head.appendChild(l);
       }
 
-      // Preload the next cover's WebP so theme rotation feels instant.
-      // Cyber is preloaded in <head>; others are warmed on first apply.
-      var coversPreloaded = { cyber: true };
-      function warmNextCover(theme) {
-        if (coversPreloaded[theme]) return;
-        coversPreloaded[theme] = true;
-        var l = document.createElement('link');
-        l.rel = 'preload';
-        l.as = 'image';
-        l.type = 'image/webp';
-        l.href = 'assets/covers/cover-' + theme + '.webp';
-        document.head.appendChild(l);
-      }
-
       function apply(nextIdx, withTrip) {
         idx = ((nextIdx % THEMES.length) + THEMES.length) % THEMES.length;
         if (withTrip && !reduce) {
@@ -636,7 +607,6 @@
         root.setAttribute('data-theme', THEMES[idx]);
         if (nameEl) nameEl.textContent = THEMES[idx];
         ensureThemeFonts(THEMES[idx]);
-        warmNextCover(THEMES[idx]);
         // Any swap resets the auto-rotate clock.
         scheduleAuto();
       }

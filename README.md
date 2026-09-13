@@ -33,9 +33,8 @@ Auto-rotation: 30–60 s on a randomized timer + scroll-triggered swaps. A `↻`
 
 - **HTML/CSS/JS only** — no npm, no framework, no bundler
 - **GitHub Pages** + custom domain `bumtrips.com` (CNAME)
-- **WebP covers** with JPEG fallback via `<picture>`, lazy-loaded
 - **WCAG 2.1 AA**: skip links, focus rings, `prefers-contrast`, `forced-colors`, safe-area insets, 44 px tap targets
-- **Six rotating themes** with on-demand Google Fonts loading (`ensureThemeFonts()`) and preloading of the next cover (`warmNextCover()`) so rotation feels instant
+- **Six rotating themes** with on-demand Google Fonts loading (`ensureThemeFonts()`) so rotation feels instant
 - **Minified**: `index.html` (~35 KB) is generated from `index.src.html` and `styles.min.css` (28 KB) from `styles.css` (40 KB). Drive script: `scripts/minify.py`.
 
 ---
@@ -49,11 +48,11 @@ Auto-rotation: 30–60 s on a randomized timer + scroll-triggered swaps. A `↻`
 ├── styles.css                # source CSS (40 KB)
 ├── styles.min.css            # minified CSS (28 KB) — what the page loads
 ├── scripts/
-│   ├── build_assets.py       # generates apple-touch-icon, favicons, OG card, cover variants
+│   ├── build_assets.py       # generates favicon + apple-touch-icon
+│   ├── build_og_card.py      # generates the Open Graph card
 │   ├── refresh_episodes.py   # rewrites AUTO-* regions in index.src.html from the RSS feed
 │   └── minify.py             # produces index.html + styles.min.css from the sources
 ├── assets/
-│   ├── covers/               # 6 themes × {full, mobile, .jpg, .webp} = 24 files
 │   ├── org/                  # bumtrips org avatar + this repo's social preview
 │   ├── favicon.svg
 │   ├── favicon-32.png
