@@ -111,3 +111,7 @@ The page layout, the a11y audit, the performance pass, the cover art, and this R
 ## License & copyright
 
 © 2026 bumtrips. See [`LICENSE`](./LICENSE). The site code is intentionally unlicensed for redistribution — the brand and audio are the show's.
+
+---
+
+[![Necrometer](necrometer.svg)](https://necrometer.dev/?u=bumtrips)

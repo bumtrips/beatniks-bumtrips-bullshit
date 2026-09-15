@@ -1,0 +1,16 @@
+name: necrometer
+on:
+  schedule: [{cron: "17 6 * * *"}]   # daily
+  workflow_dispatch:                  # manual "run now" — does NOT run on push
+permissions: { contents: write }
+jobs:
+  necrometer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: necrometer-dev/necrometer-action@v1
+        with:
+          # GITHUB_TOKEN covers the current repo and the owner's own private
+          # repos. For an org's other private repos, add a NECRO_TOKEN secret
+          # (fine-grained PAT, org-approved).
+          token: ${{ secrets.NECRO_TOKEN || secrets.GITHUB_TOKEN }}
