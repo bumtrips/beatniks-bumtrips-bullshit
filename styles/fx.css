@@ -1,0 +1,137 @@
+/* ---------- Acid flashback #1: slow hue rotation on hero ---------- */
+.hero {
+  animation: hero-acid 60s ease-in-out infinite;
+}
+@keyframes hero-acid {
+  0%, 100% { filter: hue-rotate(0deg); }
+  25%      { filter: hue-rotate(6deg) saturate(1.04); }
+  50%      { filter: hue-rotate(-4deg) saturate(1.08); }
+  75%      { filter: hue-rotate(8deg) saturate(1.02); }
+}
+
+/* ---------- Acid flashback #2: rare full-page colour invert ---------- */
+.acid-invert {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9997;
+  background: var(--accent);
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+body.acid-on .acid-invert {
+  animation: acid-flash 700ms ease-in-out;
+}
+@keyframes acid-flash {
+  0%   { opacity: 0; }
+  20%  { opacity: 0.85; }
+  60%  { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
+/* ---------- Acid flashback #3: chromatic aberration on cover ----------
+   Removed: the per-cover image already has its own palette per theme;
+   layering chromatic-drift on top of real artwork muddies the colors. */
+
+@media (max-width: 700px) {
+  .marquee { font-size: 0.7rem; }
+}
+
+/* ---------- CRT scanlines (subtle, fixed overlay) ---------- */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* ---------- Transmission glitch (rare, CSS-only) ---------- */
+.transmission-glitch {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: rgba(200, 255, 0, 0.04);
+  opacity: 0;
+}
+body.glitch-on .transmission-glitch {
+  animation: glitch-flash 110ms steps(2, end);
+}
+@keyframes glitch-flash {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  40%  { opacity: 0.4; }
+  60%  { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+body.glitch-on {
+  animation: glitch-rgb 110ms steps(2, end);
+}
+@keyframes glitch-rgb {
+  0%   { filter: none; }
+  50%  { filter: hue-rotate(20deg) saturate(1.4); }
+  100% { filter: none; }
+}
+
+/* ---------- Typewriter tagline ---------- */
+.typewriter {
+  display: inline;
+  color: var(--accent-3);
+}
+.typewriter-caret {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--accent);
+  animation: caret-blink 0.9s steps(2, end) infinite;
+}
+@keyframes caret-blink {
+  50% { opacity: 0; }
+}
+
+/* ---------- Acid-trip transition (fires during rotation) ---------- */
+html.tripping {
+  animation: trip 720ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+html.tripping * {
+  /* The trip blurs EVERYTHING via the html filter; children inherit. */
+  animation-duration: 720ms;
+}
+@keyframes trip {
+  0% {
+    filter: blur(0) hue-rotate(0deg) saturate(1) brightness(1);
+    transform: translate(0, 0) scale(1);
+  }
+  12% {
+    filter: blur(4px) hue-rotate(60deg) saturate(1.4) brightness(1.1);
+    transform: translate(-2px, 1px) scale(1.004);
+  }
+  28% {
+    filter: blur(9px) hue-rotate(160deg) saturate(0.7) brightness(1.2);
+    transform: translate(3px, -2px) scale(0.996);
+  }
+  44% {
+    filter: blur(14px) hue-rotate(240deg) saturate(1.6) brightness(0.85);
+    transform: translate(-1px, 3px) scale(1.008);
+  }
+  60% {
+    filter: blur(16px) hue-rotate(300deg) saturate(0.6) brightness(1.15);
+    transform: translate(2px, -1px) scale(0.992);
+  }
+  78% {
+    filter: blur(8px) hue-rotate(340deg) saturate(1.3) brightness(1);
+    transform: translate(-1px, 1px) scale(1.002);
+  }
+  100% {
+    filter: blur(0) hue-rotate(360deg) saturate(1) brightness(1);
+    transform: translate(0, 0) scale(1);
+  }
+}
+

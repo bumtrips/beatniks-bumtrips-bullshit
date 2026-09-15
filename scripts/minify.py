@@ -9,6 +9,11 @@ scripts/refresh_episodes.py can locate its managed regions in either file.
 
 Conservative: preserves <script> and <style> contents verbatim; never
 touches conditional IE comments; collapses whitespace between tags only.
+
+index.src.html may pull in section partials via
+    <!-- INCLUDE: sections/hero.html -->
+Includes resolve before comment stripping, so the directive itself
+never reaches the output.
 """
 import re
 import sys
@@ -19,6 +24,14 @@ CSS_IN = ROOT / "styles.css"
 CSS_OUT = ROOT / "styles.min.css"
 HTML_IN = ROOT / "index.src.html"
 HTML_OUT = ROOT / "index.html"
+
+INCLUDE_PAT = re.compile(r"<!--\s*INCLUDE:\s*(\S+)\s*-->")
+
+def resolve_includes(html: str, base: Path) -> str:
+    def sub(m: re.Match) -> str:
+        path = base / m.group(1)
+        return path.read_text(encoding="utf-8")
+    return INCLUDE_PAT.sub(sub, html)
 
 def minify_css(src: str) -> str:
     # 1. Strip /* ... */ comments (no nested /*, CSS has no strings with /).
@@ -120,6 +133,7 @@ def main() -> int:
     CSS_OUT.write_text(css_min, encoding="utf-8")
     print(f"css: {len(css_src)} -> {len(css_min)} bytes ({100*len(css_min)/len(css_src):.1f}%)")
     html_src = HTML_IN.read_text(encoding="utf-8")
+    html_src = resolve_includes(html_src, ROOT)
     html_no_comments, n = strip_html_comments(html_src)
     print(f"html comments stripped: {n}")
     html_collapsed = collapse_tag_whitespace(html_no_comments)

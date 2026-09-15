@@ -1,0 +1,111 @@
+/* ---------- Per-theme overrides for the weird layer ---------- */
+/* Marquee + typewriter + receiving ticker pick up new colours
+   automatically since they already use the variables. */
+
+/* ---------- "Receiving" corner ticker adapts per theme ---------- */
+html[data-theme="zine"] .receiving,
+html[data-theme="desert"] .receiving,
+html[data-theme="brutalist"] .receiving {
+  background: var(--bg);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+html[data-theme="radio"] .receiving,
+html[data-theme="temple"] .receiving {
+  background: var(--bg-elev);
+}
+
+/* ---------- "cyber" theme (default) gets explicit data attribute for clarity ---------- */
+html[data-theme="cyber"] { /* default :root above applies */ }
+
+/* ---------- Trip transition + page transitions pause under reduced-motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.tripping { animation: none; }
+  body { transition: none; }
+}
+
+/* ---------- P1.5: prefers-contrast: more boost ---------- */
+/* When the OS reports increased contrast, push all themes toward high-contrast pairs.
+   Keep decorative overlays intact — they're textures, not text. */
+@media (prefers-contrast: more) {
+  /* cyber */
+  :root {
+    --fg-mute: #d8d8c8;
+    --accent: #e0ff66;
+    --accent-2: #ff6ec0;
+    --accent-3: #ffe066;
+    --line: rgba(255, 255, 255, 0.30);
+  }
+  html[data-theme="zine"] {
+    --fg-mute: #2a1d10;
+    --accent: #6b2406;
+    --accent-2: #1b4a4a;
+    --accent-3: #5a1f08;
+  }
+  html[data-theme="radio"] {
+    --fg-mute: #ffd866;
+    --accent: #ffd866;
+  }
+  html[data-theme="desert"] {
+    --fg-mute: #2a1d10;
+    --accent: #6b2406;
+    --bg-elev: #e8d6b8;
+  }
+  html[data-theme="temple"] {
+    --fg-mute: #f0d878;
+    --accent-2: #a0c0ff;
+    --accent-3: #e6a0d0;
+  }
+  html[data-theme="brutalist"] {
+    --fg-mute: #2a2a2a;
+    --accent-2: #d6006b;
+  }
+}
+
+/* ---------- P0.7: forced-colors (Windows High Contrast Mode) ---------- */
+@media (forced-colors: active) {
+  :root {
+    --bg: Canvas;
+    --bg-elev: Canvas;
+    --fg: CanvasText;
+    --fg-mute: CanvasText;
+    --accent: LinkText;
+    --accent-2: Highlight;
+    --accent-3: CanvasText;
+    --line: CanvasText;
+  }
+  .scanlines,
+  .transmission-glitch,
+  .acid-invert,
+  body::before { display: none !important; }
+  /* All interactive surfaces must be visible in forced-colors. */
+  .btn,
+  .platform,
+  .brand-mark,
+  .ep-platforms a,
+  .episode {
+    border: 1px solid CanvasText !important;
+    forced-color-adjust: none;
+  }
+  .btn-primary {
+    background: Highlight !important;
+    color: HighlightText !important;
+    border-color: HighlightText !important;
+  }
+  .btn-primary:hover {
+    background: CanvasText !important;
+    color: Canvas !important;
+  }
+  a, a:hover, a:focus-visible {
+    color: LinkText;
+    text-decoration: underline;
+  }
+  a:focus-visible,
+  .ep-platforms a:focus-visible,
+  .btn:focus-visible {
+    outline: 3px solid Highlight !important;
+    outline-offset: 2px;
+  }
+  /* Marquee + ticker still readable but no animation. */
+  .marquee-track { animation: none !important; transform: none !important; }
+}

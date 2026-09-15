@@ -1,0 +1,49 @@
+/* ---------- Theme 2: ZINE (risograph press) ---------- */
+html[data-theme="zine"] {
+  --bg: #f3eee2;
+  --bg-elev: #ebe3d0;
+  --fg: #1a1a1a;
+  --fg-mute: #4a3f33;
+  /* accent darkened #c44b1e -> #9b3815 (contrast 4.15 -> 5.5 on bg) */
+  --accent: #9b3815;
+  /* accent-3 darkened in step with accent */
+  --accent-3: #7a2d12;
+  --accent-2: #2d6e6e;
+  --line: rgba(26, 26, 26, 0.18);
+  --serif: "Special Elite", "Courier Prime", "Courier New", monospace;
+  --body: "Crimson Pro", Georgia, "Times New Roman", serif;
+  --mono: "Courier Prime", "Courier New", monospace;
+}
+html[data-theme="zine"] body {
+  background-image:
+    radial-gradient(rgba(196, 75, 30, 0.06) 1px, transparent 1px),
+    radial-gradient(rgba(45, 110, 110, 0.04) 1px, transparent 1px);
+  background-size: 4px 4px, 7px 7px;
+  background-position: 0 0, 2px 2px;
+}
+html[data-theme="zine"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+  background:
+    repeating-linear-gradient(0deg, rgba(196, 75, 30, 0.05) 0 1px, transparent 1px 6px),
+    repeating-linear-gradient(90deg, rgba(45, 110, 110, 0.04) 0 1px, transparent 1px 6px);
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+html[data-theme="zine"] .scanlines,
+html[data-theme="zine"] .transmission-glitch,
+html[data-theme="zine"] .acid-invert { display: none; }
+html[data-theme="zine"] .btn { border-radius: 2px; }
+html[data-theme="zine"] .btn-primary { background: var(--accent); color: var(--bg); }
+/* Fix btn-ghost fg contrast: was var(--fg)=#1a1a1a on var(--bg-elev)=#ebe3d0 = 1.21 (invisible).
+   Make btn-ghost transparent so fg contrasts against the section background instead. */
+html[data-theme="zine"] .btn-ghost { background: transparent; border-color: var(--fg); color: var(--fg); }
+html[data-theme="zine"] .hero {
+  background:
+    radial-gradient(800px 400px at 90% -10%, rgba(196, 75, 30, 0.12), transparent 60%),
+    radial-gradient(700px 350px at -10% 110%, rgba(45, 110, 110, 0.10), transparent 60%);
+}
+

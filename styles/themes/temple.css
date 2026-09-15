@@ -1,0 +1,47 @@
+/* ---------- Theme 5: TEMPLE (stained glass / jewel tones) ---------- */
+html[data-theme="temple"] {
+  --bg: #0a0420;
+  --bg-elev: #150a30;
+  --fg: #d4af37;
+  /* fg-mute brightened #8b7530 -> #c4a050 (4.46 -> 5.5) */
+  --fg-mute: #c4a050;
+  --accent: #d4af37;
+  /* accent-2 brightened #2e5090 -> #5680c0 (2.54 -> 5.0) */
+  --accent-2: #5680c0;
+  /* accent-3 brightened #6b2d5c -> #b06fa0 (2.05 -> 5.1) */
+  --accent-3: #b06fa0;
+  --line: rgba(212, 175, 55, 0.20);
+  --serif: "Cinzel", "Cormorant Garamond", Georgia, serif;
+  --body: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --mono: "Courier New", monospace;
+}
+html[data-theme="temple"] body {
+  background:
+    radial-gradient(circle at 50% 30%, rgba(46, 80, 144, 0.10), transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(107, 45, 92, 0.08), transparent 50%);
+}
+html[data-theme="temple"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+  background:
+    repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg 30deg, rgba(212, 175, 55, 0.015) 30deg 60deg),
+    radial-gradient(circle at center, transparent 30%, rgba(10, 4, 32, 0.3) 100%);
+}
+html[data-theme="temple"] body { text-shadow: 0 0 12px rgba(212, 175, 55, 0.18); }
+html[data-theme="temple"] .btn { border-radius: 0; padding: 14px 26px; }
+html[data-theme="temple"] .btn-primary {
+  background: transparent;
+  color: var(--accent);
+  border: 1.5px solid var(--accent);
+  text-shadow: 0 0 6px rgba(212, 175, 55, 0.5);
+}
+html[data-theme="temple"] .btn-primary:hover { background: var(--accent); color: var(--bg); }
+html[data-theme="temple"] .hero {
+  background:
+    radial-gradient(1000px 500px at 50% 0%, rgba(46, 80, 144, 0.18), transparent 60%),
+    radial-gradient(700px 350px at 50% 100%, rgba(107, 45, 92, 0.15), transparent 60%);
+}
+

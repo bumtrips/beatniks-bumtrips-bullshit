@@ -1,0 +1,83 @@
+/* ---------- P2: Mobile / responsive UX ---------- */
+@media (max-width: 480px) {
+  /* P2.2: Brand-name truncates so the nav fits. */
+  .brand-name {
+    max-width: 28vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.78rem;
+  }
+  .header-wrap {
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  /* P2.4: Pull-quote scales down on small screens. */
+  .pull { font-size: clamp(1.25rem, 4.5vw, 1.6rem); }
+  .display { font-size: clamp(2.2rem, 10vw, 4rem); }
+  .display.sm { font-size: clamp(1.7rem, 6vw, 2.6rem); }
+}
+/* On phone-width screens the brand name truncates mid-word ("Beatniks · B…")
+   and reads as broken — drop it. The BBB mark + h1 carry the identity;
+   the proof dial takes over the header's middle slot instead. */
+@media (max-width: 700px) {
+  .brand-name { display: none; }
+  .receiving { display: none; }
+  .hero { padding: 4vh 0 6vh; }
+  /* Reserve 2 lines so the typewriter doesn't shift the CTA row on each quote. */
+  .tagline { margin-top: 1.5rem; min-height: 72px; }
+  .contact { padding: 6vh 0 9vh; }
+}
+
+/* ---------- P2.3: iOS safe-area-inset on sticky chrome ---------- */
+.site-header { padding-top: max(0px, env(safe-area-inset-top)); }
+
+/* ---------- Konami easter-egg message ---------- */
+.konami-msg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-elev);
+  border: 1.5px solid var(--accent);
+  border-radius: 10px;
+  padding: 14px 22px;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  box-shadow: 0 0 32px rgba(200, 255, 0, 0.4);
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+.konami-msg.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ---------- "Receiving" corner flash ---------- */
+.receiving {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: 64px;
+  z-index: 6;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: rgba(11, 11, 11, 0.85);
+  padding: 4px 9px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 250ms ease, transform 250ms ease;
+  pointer-events: none;
+}
+.receiving.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+

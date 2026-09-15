@@ -1,0 +1,106 @@
+/* ------------------------------------------------------------------
+   Beatniks, Bumtrips, Bullshit — landing page styles
+   Plain CSS, no build step. Dark, high-contrast, psychedelic accents.
+------------------------------------------------------------------ */
+
+:root {
+  --bg: #0b0b0b;
+  --bg-elev: #131313;
+  --fg: #f5f5f0;
+  --fg-mute: #a8a89e;
+  --accent: #c8ff00;     /* acid green */
+  --accent-2: #ff3ea5;   /* hot magenta */
+  --accent-3: #ffd23f;   /* mellow yellow */
+  --line: rgba(255, 255, 255, 0.08);
+  --radius: 14px;
+  --max: 72rem;
+  --serif: "Big Shoulders Display", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Inline-text-block links: distinguishable beyond color (axe link-in-text-block). */
+.rss-note a,
+.ep-more a,
+.featured-ep-links a,
+.hero-meta a,
+.site-footer .credit a {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+  text-underline-offset: 3px;
+}
+.rss-note a:hover,
+.ep-more a:hover,
+.featured-ep-links a:hover,
+.hero-meta a:hover,
+.site-footer .credit a:hover {
+  text-decoration-color: var(--accent);
+}
+
+/* In-page anchor targets must clear the sticky header (~73px) + marquee. */
+[id] { scroll-margin-top: 112px; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--accent);
+  color: #000;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+.skip-link:focus { left: 12px; top: 12px; z-index: 10; }
+
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 6vw; }
+.wrap.narrow { max-width: 48rem; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--fg-mute);
+  margin: 0 0 1rem;
+}
+
+.display {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: clamp(2.6rem, 8vw, 6rem);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.5rem;
+  text-transform: uppercase;
+}
+.display.sm {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  margin-bottom: 1.5rem;
+}
+
+.accent { color: var(--accent); }
+

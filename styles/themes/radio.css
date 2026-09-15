@@ -1,0 +1,39 @@
+/* ---------- Theme 3: RADIO (CRT amber terminal) ---------- */
+html[data-theme="radio"] {
+  --bg: #0d0700;
+  --bg-elev: #1a0f00;
+  --fg: #ffb000;
+  --fg-mute: #b07d00;
+  --accent: #ffb000;
+  --accent-2: #ff6b00;
+  --accent-3: #ffd23f;
+  --line: rgba(255, 176, 0, 0.22);
+  --serif: "Space Mono", ui-monospace, monospace;
+  --body: "Space Mono", ui-monospace, monospace;
+  --mono: "Space Mono", ui-monospace, monospace;
+}
+html[data-theme="radio"] body {
+  background: radial-gradient(ellipse at center, #1a0f00 0%, #0d0700 70%);
+}
+html[data-theme="radio"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+  background:
+    repeating-linear-gradient(0deg, rgba(255, 176, 0, 0.06) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%);
+  mix-blend-mode: screen;
+}
+html[data-theme="radio"] body {
+  text-shadow: 0 0 6px rgba(255, 176, 0, 0.35);
+}
+html[data-theme="radio"] .btn { border-radius: 0; }
+html[data-theme="radio"] .btn-primary { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+html[data-theme="radio"] .btn-primary:hover { background: var(--accent); color: var(--bg); }
+html[data-theme="radio"] .hero {
+  background: radial-gradient(800px 400px at 50% 30%, rgba(255, 176, 0, 0.06), transparent 70%);
+}
+html[data-theme="radio"] .display { letter-spacing: 0.04em; }
+

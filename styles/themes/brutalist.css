@@ -1,0 +1,60 @@
+/* ---------- Theme 6: BRUTALIST (anti-design) ---------- */
+html[data-theme="brutalist"] {
+  --bg: #fafaf6;
+  --bg-elev: #f0f0e8;
+  --fg: #0a0a0a;
+  --fg-mute: #5a5a5a;
+  --accent: #0a0a0a;
+  --accent-2: #ff3ea5;
+  --accent-3: #0a0a0a;
+  --line: rgba(10, 10, 10, 0.85);
+  --serif: ui-monospace, "SF Mono", "Menlo", "Courier New", monospace;
+  --body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Menlo", "Courier New", monospace;
+}
+html[data-theme="brutalist"] body {
+  background-image: none;
+  text-shadow: none;
+}
+html[data-theme="brutalist"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 32px,
+    rgba(10, 10, 10, 0.04) 32px,
+    rgba(10, 10, 10, 0.04) 33px
+  );
+}
+html[data-theme="brutalist"] .scanlines,
+html[data-theme="brutalist"] .transmission-glitch,
+html[data-theme="brutalist"] .acid-invert { display: none; }
+html[data-theme="brutalist"] .btn {
+  border-radius: 0;
+  background: var(--bg);
+  border: 2px solid var(--fg);
+  color: var(--fg);
+}
+html[data-theme="brutalist"] .btn-primary {
+  /* Brutalist was: fg #000 on accent #0a0a0a = 1.06:1 (invisible).
+     Override: use accent-2 (magenta) so white text has >4.5:1 contrast. */
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+  color: var(--bg);
+}
+html[data-theme="brutalist"] .btn-primary:hover { background: var(--fg); border-color: var(--fg); color: var(--bg); }
+html[data-theme="brutalist"] .btn-ghost {
+  background: transparent;
+  border-color: var(--fg);
+  color: var(--fg);
+}
+html[data-theme="brutalist"] .btn-ghost:hover { background: var(--fg); color: var(--bg); }
+html[data-theme="brutalist"] .display { letter-spacing: 0; text-transform: none; }
+html[data-theme="brutalist"] .hero {
+  background: none;
+  border-bottom: 4px solid var(--fg);
+}

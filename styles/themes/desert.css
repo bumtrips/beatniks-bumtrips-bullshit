@@ -1,0 +1,47 @@
+/* ---------- Theme 4: DESERT (field-recording palette) ---------- */
+html[data-theme="desert"] {
+  --bg: #d4b896;
+  --bg-elev: #dec7a8;
+  --fg: #3a2410;
+  /* fg-mute darkened #6e5a3a -> #4a3a20 (contrast 3.48 -> 5.7) */
+  --fg-mute: #4a3a20;
+  /* accent darkened #b8421a -> #8a320f (contrast 2.90 -> 4.7) */
+  --accent: #8a320f;
+  --accent-2: #6b3a1e;
+  --accent-3: #4a2f1a;
+  --line: rgba(58, 36, 16, 0.22);
+  --serif: "Yeseva One", "Playfair Display", Georgia, serif;
+  --body: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Courier New", "Courier", monospace;
+}
+html[data-theme="desert"] body {
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(184, 66, 26, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(107, 58, 30, 0.06), transparent 50%);
+}
+html[data-theme="desert"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9996;
+  background-image:
+    radial-gradient(rgba(58, 36, 16, 0.06) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+html[data-theme="desert"] .scanlines,
+html[data-theme="desert"] .transmission-glitch,
+html[data-theme="desert"] .acid-invert { display: none; }
+html[data-theme="desert"] .btn { border-radius: 4px; }
+html[data-theme="desert"] .btn-primary { background: var(--accent); color: var(--bg); }
+/* Fix btn-ghost contrast (was 1.44:1 on bg-elev). Make it transparent. */
+html[data-theme="desert"] .btn-ghost { background: transparent; border-color: var(--fg); color: var(--fg); }
+html[data-theme="desert"] .hero {
+  background:
+    radial-gradient(900px 450px at 90% -10%, rgba(184, 66, 26, 0.18), transparent 60%),
+    radial-gradient(700px 400px at -10% 110%, rgba(74, 47, 26, 0.18), transparent 60%);
+}
+html[data-theme="desert"] .display { font-style: italic; }
+
