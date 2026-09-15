@@ -114,4 +114,8 @@ The page layout, the a11y audit, the performance pass, the cover art, and this R
 
 ---
 
+<div align="center">
+
 [![Necrometer](necrometer.svg)](https://necrometer.dev/?u=bumtrips)
+
+</div>
