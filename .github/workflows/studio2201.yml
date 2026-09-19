@@ -40,3 +40,19 @@ jobs:
           path: .
           fail-on: block
           format: markdown
+
+      # Persist the per-tool reports so failed runs still surface findings
+      # (the action writes them to the step cwd but does not upload them).
+      - name: Upload studio2201 reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: studio2201-reports
+          path: |
+            snip_report.md
+            vigil_report.md
+            aegis_report.md
+            proven_report.md
+            boneyard_report.md
+          if-no-files-found: ignore
+          retention-days: 14
