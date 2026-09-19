@@ -1,58 +1,43 @@
-name: studio2201 Security Audit
+name: studio2201 Security Gate
 
-# Unified security gate: snip (diff/vibe-code), vigil (dependency dormancy),
-# aegis (post-quantum cryptography). Scorecard lands in the run summary;
-# inline annotations on the PR diff. Fails the build on violations.
+# Official template from studio2201.com/agents — see
+# https://studio2201.com/agents#pipelines for the source prompt and YAML.
 
 on:
-  pull_request:
   push:
-    branches: [master]
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
   workflow_dispatch:
-    # Manual "run now" — useful to audit the current state of master
-    # without waiting for the next push or PR.
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
 
-# Cancel superseded PR runs; let pushes to master complete to record
-# the latest commit's audit.
-concurrency:
-  group: studio2201-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
-
 jobs:
-  studio2201:
-    name: studio2201 Security & Governance
+  security-gate:
+    name: studio2201 Security Gate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Need full history so Snip can diff against the base ref on
-          # PRs (`origin/$GITHUB_BASE_REF...HEAD`) and HEAD~1 on pushes.
           fetch-depth: 0
 
-      - name: studio2201 audit (snip, vigil, aegis)
+      - name: Run studio2201 Security Gate
         uses: studio2201/studio2201@master
         with:
-          tools: snip,vigil,aegis
-          path: .
-          fail-on: block
-          format: markdown
+          tools: 'all'
+          fail-on: 'block'
 
-      # Persist the per-tool reports so failed runs still surface findings
-      # (the action writes them to the step cwd but does not upload them).
-      - name: Upload studio2201 reports
-        if: always()
+      - name: Retain Audit Findings
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: studio2201-reports
+          name: studio2201-audit-findings
           path: |
-            snip_report.md
-            vigil_report.md
-            aegis_report.md
-            proven_report.md
-            boneyard_report.md
+            *_report.md
           if-no-files-found: ignore
-          retention-days: 14
