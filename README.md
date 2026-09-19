@@ -2,19 +2,6 @@
 
 > A field-recorded journey through literature, consciousness, and counterculture.
 
-[![secured by studio2201](https://img.shields.io/badge/secured%20by-studio2201-2f6f5e?logo=shield)](https://studio2201.com) [![snip][b-snip]][ci-snip] [![vigil][b-vigil]][ci-vigil] [![aegis][b-aegis]][ci-aegis] [![proven][b-proven]][ci-proven] [![boneyard][b-boneyard]][ci-boneyard]
-
-[b-snip]: https://img.shields.io/github/actions/workflow/status/bumtrips/beatniks-bumtrips-bullshit/snip.yml?label=snip&logo=shield
-[ci-snip]: https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/snip.yml
-[b-vigil]: https://img.shields.io/github/actions/workflow/status/bumtrips/beatniks-bumtrips-bullshit/vigil.yml?label=vigil&logo=shield
-[ci-vigil]: https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/vigil.yml
-[b-aegis]: https://img.shields.io/github/actions/workflow/status/bumtrips/beatniks-bumtrips-bullshit/aegis.yml?label=aegis&logo=shield
-[ci-aegis]: https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/aegis.yml
-[b-proven]: https://img.shields.io/github/actions/workflow/status/bumtrips/beatniks-bumtrips-bullshit/proven.yml?label=proven&logo=shield
-[ci-proven]: https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/proven.yml
-[b-boneyard]: https://img.shields.io/github/actions/workflow/status/bumtrips/beatniks-bumtrips-bullshit/boneyard.yml?label=boneyard&logo=shield
-[ci-boneyard]: https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/boneyard.yml
-
 The official website for the **Beatniks, Bumtrips, Bullshit** podcast — your secret audio dose of acid. Spontaneous conversations about mysticism, poetry, art, music, total bullshit, sci-fi, paranoia, dream, utopia, and friendship. Field-recorded in Berlin and Santa Cruz.
 
 **Live site → [bumtrips.com](https://bumtrips.com)**

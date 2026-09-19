@@ -16,7 +16,3 @@ venv/
 # Local build / scratch
 *.log
 .DS_Store
-
-# studio2201 audit output (lives in working dir; the workflow also
-# uploads them as a `studio2201-audit-findings` artifact)
-*_report.md
