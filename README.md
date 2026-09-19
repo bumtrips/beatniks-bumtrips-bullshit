@@ -8,6 +8,21 @@ The official website for the **Beatniks, Bumtrips, Bullshit** podcast — your s
 
 ---
 
+<div align="center">
+
+| Security Pillar | Verification Badge |
+| --- | --- |
+| **Platform Standard** | [![secured by studio2201](https://img.shields.io/badge/secured%20by-studio2201-2f6f5e?logo=shield)](https://studio2201.com) |
+| **Credential Defense** | [![snip: 0 secrets](https://img.shields.io/badge/snip-0%20secrets-2f6f5e?logo=shield)](https://studio2201.com/snip) |
+| **Supply Chain Surface** | [![vigil: 0 dependencies](https://img.shields.io/badge/vigil-0%20dependencies-2f6f5e?logo=shield)](https://studio2201.com/vigil) |
+| **Post-Quantum Cryptography** | [![aegis: PQC compliant](https://img.shields.io/badge/aegis-PQC%20compliant-2f6f5e?logo=shield)](https://studio2201.com/aegis) |
+| **Build Provenance & SLSA** | [![proven: ML-DSA-65 verified](https://img.shields.io/badge/proven-ML--DSA--65%20verified-2f6f5e?logo=shield)](https://studio2201.com/proven) |
+| **Repository Governance** | [![boneyard: maintained](https://img.shields.io/badge/boneyard-maintained-2f6f5e?logo=shield)](https://studio2201.com/boneyard) |
+
+</div>
+
+---
+
 ## What this repo is
 
 A static, vanilla HTML + CSS + JS page served from GitHub Pages. No framework, no bundler, no backend. Episode data is fetched daily from the public podcast RSS feed by a GitHub Actions job and inlined into the page; the rest is hand-written.
