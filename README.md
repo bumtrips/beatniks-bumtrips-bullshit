@@ -2,22 +2,14 @@
 
 > A field-recorded journey through literature, consciousness, and counterculture.
 
+[![studio2201 Suite](https://img.shields.io/badge/studio2201-5%2F5%20Verified-2f6f5e?logo=shield)](https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/studio2201.yml)
+[![Vibe-Safe](https://img.shields.io/badge/vibe--safe-SHIP-brightgreen.svg)](https://studio2201.com/snip)
+[![Dormancy](https://img.shields.io/badge/dormancy-healthy-2f6f5e.svg)](https://studio2201.com/vigil)
+[![PQC](https://img.shields.io/badge/PQC-Quantum--Safe-blueviolet.svg)](https://studio2201.com/aegis)
+[![SLSA](https://img.shields.io/badge/SLSA-Level%203%2B-blue.svg)](https://studio2201.com/proven)
+[![Boneyard](https://img.shields.io/badge/boneyard%20index-0%2F100-brightgreen.svg)](https://studio2201.com/boneyard)
+
 The official website for the **Beatniks, Bumtrips, Bullshit** podcast — your secret audio dose of acid. Spontaneous conversations about mysticism, poetry, art, music, total bullshit, sci-fi, paranoia, dream, utopia, and friendship. Field-recorded in Berlin and Santa Cruz.
-
-<details>
-<summary><a href="https://studio2201.com/agents#badges">
-  <img src="https://img.shields.io/badge/studio2201-5%2F5%20Verified-2f6f5e?logo=shield" alt="studio2201 Suite">
-</a> <b>Detailed Governance Scorecard</b></summary>
-
-| Tool | Focus | Status | Badge |
-| :--- | :--- | :---: | :---: |
-| Snip | Vibe-Code | Pass | [![Vibe-Safe](https://img.shields.io/badge/vibe--safe-SHIP-brightgreen.svg)](https://studio2201.com/snip) |
-| Vigil | Dormancy | Pass | [![Dormancy](https://img.shields.io/badge/dormancy-healthy-2f6f5e.svg)](https://studio2201.com/vigil) |
-| Aegis | PQC Migration | Pass | [![PQC](https://img.shields.io/badge/PQC-Quantum--Safe-blueviolet.svg)](https://studio2201.com/aegis) |
-| Proven | SLSA L3+ | Pass | [![SLSA](https://img.shields.io/badge/SLSA-Level%203%2B-blue.svg)](https://studio2201.com/proven) |
-| Boneyard | Debt Radar | Pass | [![Boneyard](https://img.shields.io/badge/boneyard%20index-0%2F100-brightgreen.svg)](https://studio2201.com/boneyard) |
-
-</details>
 
 **Live site → [bumtrips.com](https://bumtrips.com)**
 
