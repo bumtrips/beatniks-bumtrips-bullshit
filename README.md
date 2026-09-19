@@ -96,6 +96,8 @@ Tagged releases live on [github.com/bumtrips/beatniks-bumtrips-bullshit/releases
 | `v2026.09.13-hotfix3` | Hero layout fix + inline SVG cover |
 | `v2026.09.13-hotfix4` | 6 AI-generated theme covers |
 | `v2026.09.13-hotfix5` | WebP covers, font slim-down, HTML/CSS minify |
+| `v2026.09.18` | Rust episodes-fetcher migration (stdlib-only crate, zero crates.io deps) |
+| `v2026.09.19-hotfix1` | studio2201 security audit: 5 per-tool workflows + centered 2-column scorecard |
 
 ---
 
