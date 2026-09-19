@@ -2,7 +2,7 @@
 
 > A field-recorded journey through literature, consciousness, and counterculture.
 
-[![snip][b-snip]][ci-snip] [![vigil][b-vigil]][ci-vigil] [![aegis][b-aegis]][ci-aegis] [![proven][b-proven]][ci-proven] [![boneyard][b-boneyard]][ci-boneyard]
+[![secured by studio2201](https://img.shields.io/badge/secured%20by-studio2201-2f6f5e?logo=shield)](https://studio2201.com) [![snip][b-snip]][ci-snip] [![vigil][b-vigil]][ci-vigil] [![aegis][b-aegis]][ci-aegis] [![proven][b-proven]][ci-proven] [![boneyard][b-boneyard]][ci-boneyard]
 
 [b-snip]: https://img.shields.io/github/actions/workflow/status/bumtrips/beatniks-bumtrips-bullshit/snip.yml?label=snip&logo=shield
 [ci-snip]: https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/snip.yml
