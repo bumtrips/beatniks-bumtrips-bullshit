@@ -1,0 +1,39 @@
+name: studio2201 Security Audit
+
+# Unified security gate: snip (diff/vibe-code), vigil (dependency dormancy),
+# aegis (post-quantum cryptography). Scorecard lands in the run summary;
+# inline annotations on the PR diff. Fails the build on violations.
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+# Cancel superseded PR runs; let pushes to master complete to record
+# the latest commit's audit.
+concurrency:
+  group: studio2201-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  studio2201:
+    name: studio2201 Security & Governance
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Need full history so Snip can diff against the base ref on
+          # PRs (`origin/$GITHUB_BASE_REF...HEAD`) and HEAD~1 on pushes.
+          fetch-depth: 0
+
+      - name: studio2201 audit (snip, vigil, aegis)
+        uses: studio2201/studio2201@master
+        with:
+          tools: snip,vigil,aegis
+          path: .
+          fail-on: block
+          format: markdown
