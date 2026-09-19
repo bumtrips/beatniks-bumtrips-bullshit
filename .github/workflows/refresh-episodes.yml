@@ -1,10 +1,19 @@
 name: Refresh episodes
 
-# Daily refresh of the auto-managed episode list. The script fetches
-# the live Anchor.fm RSS feed for the show and rewrites the
-# AUTO-EPISODES-* / AUTO-LASTREFRESH / AUTO-EPCOUNT / AUTO-MARQUEE
-# marker regions inside index.src.html, then minify.py regenerates
-# the served index.html (and styles.min.css) from the source.
+# Daily refresh of the auto-managed episode list.
+#
+# Pipeline:
+#   1. Build the Rust backend at scripts/episodes-fetcher/ (stdlib only,
+#      zero crates). Produces target/release/episodes-fetcher, which
+#      fetches the live Anchor.fm RSS feed + iTunes Lookup API and
+#      updates data/apple_episode_ids.json + writes data/parsed_episodes.json.
+#   2. Run scripts/refresh_episodes.py — reads parsed_episodes.json,
+#      renders the HTML episode block + marquee, and rewrites the
+#      AUTO-EPISODES-* / AUTO-LASTREFRESH / AUTO-EPCOUNT / AUTO-MARQUEE
+#      marker regions inside index.src.html.
+#   3. Run scripts/minify.py — regenerates the served index.html (and
+#      styles.min.css) from the source.
+#   4. Commit if anything changed.
 
 on:
   schedule:
@@ -25,6 +34,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Rust (stable, no toolchain pinning — episodes-fetcher is stdlib-only)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build the Rust backend
+        run: |
+          set -euo pipefail
+          cargo build --release --manifest-path scripts/episodes-fetcher/Cargo.toml
+
       - name: Run refresh script
         run: |
           set -euo pipefail
@@ -38,7 +55,7 @@ jobs:
       - name: Commit if changed
         run: |
           set -euo pipefail
-          git add index.src.html index.html styles.min.css data/apple_episode_ids.json
+          git add index.src.html index.html styles.min.css data/apple_episode_ids.json data/parsed_episodes.json
           if git diff --cached --quiet; then
             echo "No changes to commit — feed matches what is already on the page."
           else

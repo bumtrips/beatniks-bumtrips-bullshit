@@ -1,23 +1,17 @@
 """episodes package — auto-managed episode list for the BBB page.
 
-Split from scripts/refresh_episodes.py (256-line cap):
-  feed.py    — RSS/iTunes fetch, Apple ID cache, episode parsing
+Functional split (each under 256 lines):
   render.py  — HTML block + marquee string rendering
   regions.py — AUTO-* marker replace/extract helpers
+
+Backend (RSS/iTunes fetch + Apple cache) lives in Rust at
+scripts/episodes-fetcher/, invoked by scripts/refresh_episodes.py.
 """
 
-from pathlib import Path
+# How many episodes to render in the on-page list.
+N_EPISODES = 8
 
-RSS_URL = "https://anchor.fm/s/4431c4ac/podcast/rss"
-ITUNES_LOOKUP_URL = (
-    "https://itunes.apple.com/lookup"
-    "?id=1663479533&entity=podcastEpisode&limit=200"
-)
-N_EPISODES = 8  # how many to render in the on-page list
-
-REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-APPLE_CACHE_PATH = REPO_ROOT / "data" / "apple_episode_ids.json"
-
+# AUTO-* region markers recognised inside index.src.html.
 EPISODES_START = "<!-- AUTO-EPISODES-START -->"
 EPISODES_END = "<!-- AUTO-EPISODES-END -->"
 LASTREFRESH_OPEN = "<!-- AUTO-LASTREFRESH -->"

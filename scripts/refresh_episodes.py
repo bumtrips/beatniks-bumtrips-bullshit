@@ -4,33 +4,40 @@ Refresh the auto-managed episode list on the BBB marketing page.
 
 What this does
 --------------
-1. Fetches the live Anchor.fm RSS feed for the show.
-2. Parses the latest N episodes (title, pubDate, duration, link).
-3. Renders an HTML block (ordered list + an "ep-count / archive" footer).
-4. Updates whichever marker regions exist inside `index.src.html`:
+1. Invokes the Rust `episodes-fetcher` binary (scripts/episodes-fetcher/),
+   which fetches the live Anchor.fm RSS + iTunes Lookup API and writes:
+     - data/parsed_episodes.json   (latest + total episodes)
+     - data/apple_episode_ids.json (merged Apple Podcasts cache)
+2. Renders an HTML block (ordered list + an "ep-count / archive" footer).
+3. Updates whichever marker regions exist inside `index.src.html`:
    - <!-- AUTO-EPISODES-START --> ... <!-- AUTO-EPISODES-END -->
-       → ordered list of latest N episodes
+       -> ordered list of latest N episodes
    - <!-- AUTO-MARQUEE -->...<!-- /AUTO-MARQUEE -->
-       → " · "-joined latest titles for the scrolling marquee
+       -> " . "-joined latest titles for the scrolling marquee
    - <!-- AUTO-LASTREFRESH -->...<!-- /AUTO-LASTREFRESH -->
-       → current ISO 8601 UTC timestamp
+       -> current ISO 8601 UTC timestamp
    - <!-- AUTO-EPCOUNT -->N<!-- /AUTO-EPCOUNT -->
-       → integer episode count from the feed
+       -> integer episode count from the feed
 
-   Regions whose markers are absent from the file are skipped — they may
-   have been removed deliberately from the page (e.g. the old footer
-   ticker's AUTO-EPCOUNT / AUTO-LASTREFRESH spans).
+   Regions whose markers are absent from the file are skipped -- they
+   may have been removed deliberately from the page (e.g. the old
+   footer ticker's AUTO-EPCOUNT / AUTO-LASTREFRESH spans).
 
 `index.src.html` is the source of truth; `index.html` is generated from
-it by `scripts/minify.py` (which preserves the markers). Always run this
-script against the source file, then re-run minify.py.
+it by `scripts/minify.py` (which preserves the markers). Always run
+this script against the source file, then re-run minify.py.
 
 Designed to be called by a daily GitHub Actions cron (see
 .github/workflows/refresh-episodes.yml). Idempotent: if the rendered
 output equals what's already in the file, it exits 0 without rewriting.
 
-Implementation lives in the episodes package (scripts/episodes/) —
-this file is just the driver.
+Rust backend (no libraries, stdlib only) lives in
+scripts/episodes-fetcher/. The build pipeline is:
+    cargo build --release --manifest-path scripts/episodes-fetcher/Cargo.toml
+and the binary is invoked as either
+    scripts/episodes-fetcher/target/release/episodes-fetcher <repo-root>
+or, if not yet built, via
+    cargo run --release --quiet --manifest-path ... -- <repo-root>
 
 Usage
 -----
@@ -38,12 +45,14 @@ Usage
 
 Defaults to `index.src.html` in the repo root when run from CI.
 """
-
 from __future__ import annotations
 
+import json
 import os
+import subprocess
 import sys
 from datetime import datetime, timezone
+from pathlib import Path
 
 from episodes import (
     EPCOUNT_CLOSE,
@@ -55,14 +64,6 @@ from episodes import (
     MARQUEE_CLOSE,
     MARQUEE_OPEN,
     N_EPISODES,
-    RSS_URL,
-)
-from episodes.feed import (
-    fetch_apple_episode_ids,
-    fetch_rss,
-    load_apple_cache,
-    parse_episodes,
-    save_apple_cache,
 )
 from episodes.regions import (
     _norm,
@@ -74,47 +75,64 @@ from episodes.regions import (
 from episodes.render import render_episodes_block, render_marquee_items
 
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+FETCHER_DIR = REPO_ROOT / "scripts" / "episodes-fetcher"
+FETCHER_BIN = FETCHER_DIR / "target" / "release" / "episodes-fetcher"
+PARSED_PATH = REPO_ROOT / "data" / "parsed_episodes.json"
+APPLE_PATH = REPO_ROOT / "data" / "apple_episode_ids.json"
+
+
+def run_fetcher() -> None:
+    """Invoke the Rust backend. Prefer the prebuilt binary, fall back
+    to `cargo run` so first-time dev setups work without a build step."""
+    if FETCHER_BIN.exists() and os.access(FETCHER_BIN, os.X_OK):
+        cmd = [str(FETCHER_BIN), str(REPO_ROOT)]
+    else:
+        cmd = [
+            "cargo", "run", "--release", "--quiet",
+            "--manifest-path", str(FETCHER_DIR / "Cargo.toml"),
+            "--", str(REPO_ROOT),
+        ]
+    r = subprocess.run(cmd, check=False)
+    if r.returncode != 0:
+        sys.stderr.write("error: episodes-fetcher (Rust) failed\n")
+        sys.exit(r.returncode or 1)
+
+
+def load_json(path: Path) -> object:
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 def main() -> int:
     index_path = sys.argv[1] if len(sys.argv) > 1 else "index.src.html"
     if not os.path.exists(index_path):
         print(f"error: {index_path} not found", file=sys.stderr)
         return 2
 
-    with open(index_path, "r", encoding="utf-8") as f:
-        original = f.read()
+    run_fetcher()
 
-    xml = fetch_rss(RSS_URL)
-    eps = parse_episodes(xml)
+    if not PARSED_PATH.exists():
+        print("error: data/parsed_episodes.json missing after fetch", file=sys.stderr)
+        return 3
+
+    parsed = load_json(PARSED_PATH)
+    eps = parsed.get("episodes") or []
     if not eps:
         print("error: feed parsed but no episodes found", file=sys.stderr)
         return 3
-
-    # Latest N episodes (newest first).
-    latest = eps[:N_EPISODES]
     total = len(eps)
+    latest = eps[:N_EPISODES]
+    cached = load_json(APPLE_PATH) if APPLE_PATH.exists() else {}
 
-    # Apple Podcasts per-episode IDs: load persisted cache, merge with
-    # any fresh data from the iTunes Lookup API, write back if merged.
-    cached = load_apple_cache()
-    fresh = fetch_apple_episode_ids()
-    if fresh:
-        merged = {**cached, **fresh}  # fresh wins
-        if merged != cached:
-            save_apple_cache(merged)
-            cached = merged
-        print(f"apple: {len(merged)} total ({len(fresh)} fresh)")
-    else:
-        print(f"apple: {len(cached)} from cache (API unreachable or empty)")
+    with open(index_path, "r", encoding="utf-8") as f:
+        original = f.read()
 
-    # Compute new content for each auto-managed region.
     new_ep_block = render_episodes_block(latest, total, cached)
     new_marquee = render_marquee_items(eps[:12])
     new_epcount = str(total)
     new_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
-    # Read current content from each region that exists in the file
-    # (whitespace-normalised for a stable comparison that ignores
-    # incidental formatting drift). Absent markers → region skipped.
     cur_ep_block = _norm(extract_region(original, EPISODES_START, EPISODES_END)) if EPISODES_START in original else None
     cur_marquee  = _norm(extract_inline(original, MARQUEE_OPEN, MARQUEE_CLOSE)) if MARQUEE_OPEN in original else None
     cur_epcount  = _norm(extract_inline(original, EPCOUNT_OPEN, EPCOUNT_CLOSE)) if EPCOUNT_OPEN in original else None
@@ -125,13 +143,10 @@ def main() -> int:
         (cur_epcount  is not None and _norm(new_epcount)  != cur_epcount)
     )
 
-    # If nothing actually changed, leave the file alone — including the
-    # timestamp. The CI workflow will see no diff and skip the commit.
     if not content_changed:
         print(f"no change ({total} episodes; content unchanged since last refresh)")
         return 0
 
-    # Otherwise, write all four regions.
     new_text = replace_region(original, EPISODES_START, EPISODES_END, new_ep_block)
     new_text = replace_inline(new_text, LASTREFRESH_OPEN, LASTREFRESH_CLOSE, new_ts)
     new_text = replace_inline(new_text, EPCOUNT_OPEN, EPCOUNT_CLOSE, new_epcount)
