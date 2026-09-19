@@ -1,6 +1,6 @@
 name: studio2201 Security Gate
 
-# Official template from studio2201.com/agents — see
+# Official template from studio2201.com — see
 # https://studio2201.com/agents#pipelines for the source prompt and YAML.
 
 on:
@@ -28,9 +28,9 @@ jobs:
           fetch-depth: 0
 
       - name: Run studio2201 Security Gate
-        uses: studio2201/studio2201@master
+        uses: studio2201/studio2201@v1
         with:
-          tools: 'all'
+          tools: 'snip,vigil,aegis'
           fail-on: 'block'
 
       - name: Retain Audit Findings
