@@ -2,7 +2,7 @@
 
 > A field-recorded journey through literature, consciousness, and counterculture.
 
-[![studio2201](https://img.shields.io/github/actions/workflow/status/bumtrips/beatniks-bumtrips-bullshit/.github/workflows/studio2201.yml?branch=master&logo=shield)](https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/studio2201.yml)
+[![studio2201](https://img.shields.io/github/actions/workflow/status/bumtrips/beatniks-bumtrips-bullshit/studio2201.yml?branch=master&label=studio2201&logo=shield)](https://github.com/bumtrips/beatniks-bumtrips-bullshit/actions/workflows/studio2201.yml)
 
 The official website for the **Beatniks, Bumtrips, Bullshit** podcast — your secret audio dose of acid. Spontaneous conversations about mysticism, poetry, art, music, total bullshit, sci-fi, paranoia, dream, utopia, and friendship. Field-recorded in Berlin and Santa Cruz.
 
